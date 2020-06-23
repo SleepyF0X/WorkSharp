@@ -4,11 +4,11 @@ using System.Text;
 
 namespace WorkSharp.DAL.DbModels
 {
-    public class User
+    public class DbProfile
     {
         public Guid Id { get; set; }
-        public string Login { get; set; }
-        public string Password { get; set; }
-
+        public DbUser User { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
     }
 }

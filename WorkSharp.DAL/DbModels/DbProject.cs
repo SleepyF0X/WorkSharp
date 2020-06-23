@@ -4,13 +4,11 @@ using System.Text;
 
 namespace WorkSharp.DAL.DbModels
 {
-    public class Task
+    public class DbProject
     {
         public Guid Id { get; set; }
-        public Guid TaskBoardId { get; set; }
         public string Name { get; set; }
         public string Info { get; set; }
-        public DateTimeOffset Deadline { get; set; }
-        public Guid ExecutorId { get; set; }
+        public Guid Creator { get; set; }
     }
 }
