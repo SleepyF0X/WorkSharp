@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WorkSharp.DAL.DbModels
 {
-    public class TaskBoard
+    public class DbTaskBoard
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
