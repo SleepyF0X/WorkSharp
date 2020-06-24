@@ -7,10 +7,11 @@ using WorkSharp.Domain.Repository;
 
 namespace WorkSharp.DAL.EFCoreRepository
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+    public class GenericRepository<T, E> : IGenericRepository<T, E> where T : class where E : class
     {
         private WorkSharpDbContext _context;
         private DbSet<T> _dbSet;
+
         public GenericRepository(WorkSharpDbContext context)
         {
             _context = context;

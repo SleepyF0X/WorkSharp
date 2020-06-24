@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using WorkSharp.DAL;
+using AutoMapper;
+using WorkSharp.DAL.Mappers;
 
 namespace WorkSharp
 {
@@ -21,6 +23,7 @@ namespace WorkSharp
         {
             string ConnectionString = Configuration.GetConnectionString("Connection");
             services.AddDbContext<WorkSharpDbContext>(options => options.UseSqlServer(ConnectionString));
+            services.AddAutoMapper(typeof(MapperProfile));
             services.AddControllersWithViews();
         }
 

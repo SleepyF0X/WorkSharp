@@ -9,5 +9,6 @@ namespace WorkSharp.Domain.Models
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Info { get; set; }
+        public Profile Creator { get; set; }
     }
 }
