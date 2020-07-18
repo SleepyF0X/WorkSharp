@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using WorkSharp.DAL;
 using AutoMapper;
 using WorkSharp.DAL.Mappers;
+using WorkSharp.DAL.EFCoreRepository;
 
 namespace WorkSharp
 {
@@ -24,7 +25,8 @@ namespace WorkSharp
             string ConnectionString = Configuration.GetConnectionString("Connection");
             services.AddDbContext<WorkSharpDbContext>(options => options.UseSqlServer(ConnectionString));
             services.AddAutoMapper(typeof(MapperProfile));
-            services.AddControllersWithViews();
+            services.AddMvc();
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -39,7 +41,9 @@ namespace WorkSharp
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute("default", "{controller = Main}/{action = Index}");
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Main}/{action=Index}/{id?}");
             });
         }
     }

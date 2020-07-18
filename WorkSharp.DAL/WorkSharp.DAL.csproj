@@ -15,8 +15,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\WorkSharp.Domain\WorkSharp.Domain.csproj" />
-  </ItemGroup>
-
 </Project>

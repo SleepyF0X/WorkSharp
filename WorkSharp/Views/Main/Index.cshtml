@@ -1,0 +1,12 @@
+﻿@using WorkSharp.ViewModels
+@model IReadOnlyCollection<ProjectViewModel>
+<html>
+<head><title>ahah</title></head>
+<body>
+    <h1>Hello!</h1>
+    @foreach (var genre in Model)
+    {
+        <li>@genre.Name</li>
+    }
+</body>
+</html>
