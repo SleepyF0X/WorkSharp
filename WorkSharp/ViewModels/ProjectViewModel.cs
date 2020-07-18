@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace WorkSharp.Domain.Models
+namespace WorkSharp.ViewModels
 {
-    public class Project
+    public class ProjectViewModel
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Info { get; set; }
-        public Profile Creator { get; set; }
+        public Guid CreatorId { get; set; }
     }
 }

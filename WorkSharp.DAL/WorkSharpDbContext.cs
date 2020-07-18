@@ -16,5 +16,10 @@ namespace WorkSharp.DAL
         public DbSet<DbTeam> Teams { get; set; }
         public DbSet<DbUser> Users { get; set; }
         public WorkSharpDbContext(DbContextOptions<WorkSharpDbContext> options) : base(options) { }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.Entity<DbProject>().HasData(new DbProject { Id = Guid.NewGuid(), Name = "Proj", Info = "OMG" });
+        }
     }
 }

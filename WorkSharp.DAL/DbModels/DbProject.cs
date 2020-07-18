@@ -9,6 +9,6 @@ namespace WorkSharp.DAL.DbModels
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Info { get; set; }
-        public Guid Creator { get; set; }
+        public Guid CreatorId { get; set; }
     }
 }
