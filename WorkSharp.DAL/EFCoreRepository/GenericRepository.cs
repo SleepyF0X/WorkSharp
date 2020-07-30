@@ -10,7 +10,6 @@ namespace WorkSharp.DAL.EFCoreRepository
     {
         private WorkSharpDbContext _context;
         private DbSet<T> _dbSet;
-
         public GenericRepository(WorkSharpDbContext context)
         {
             _context = context;

@@ -23,6 +23,7 @@ namespace WorkSharp.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
         }
+        [HttpGet]
         public IActionResult Login()
         {
             return View();
@@ -48,7 +49,18 @@ namespace WorkSharp.Controllers
                 //    await _signInManager.SignInAsync(user, false);
                 //}
                 
-                return RedirectToAction("Index", "Main");
+                return RedirectToAction("Login", "Authentication");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            DbUser user = new DbUser
+            {
+                UserName = model.Login
+            };
+            //_signInManager.SignInAsync(user, model.Password);
+            return RedirectToAction("Index", "Main");
         }
     }
 }

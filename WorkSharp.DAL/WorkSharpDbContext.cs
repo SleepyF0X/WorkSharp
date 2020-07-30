@@ -18,7 +18,12 @@ namespace WorkSharp.DAL
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<DbProject>().HasData(new DbProject { Id = Guid.NewGuid(), Name = "Proj", Info = "OMG" });
+            builder.Entity<DbProject>().HasData(
+                new DbProject { Id = Guid.NewGuid(), Name = "Proj", Info = "OMG" },
+                new DbProject { Id = Guid.NewGuid(), Name = "1", Info = "OMG" },
+                new DbProject { Id = Guid.NewGuid(), Name = "2", Info = "OMG" },
+                new DbProject { Id = Guid.NewGuid(), Name = "3", Info = "OMG" }
+                );
         }
     }
 }
