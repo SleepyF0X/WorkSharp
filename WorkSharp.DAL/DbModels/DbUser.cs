@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
 
 namespace WorkSharp.DAL.DbModels
 {
-    public class DbUser
+    public class DbUser : IdentityUser
     {
-        public Guid Id { get; set; }
-        public string Login { get; set; }
-        public string Password { get; set; }
-
     }
 }

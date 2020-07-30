@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using WorkSharp.DAL.DbModels;
 using WorkSharp.ViewModels;
+using WorkSharp.ViewModels.Authentication;
 
 namespace WorkSharp.DAL.Mappers
 {
@@ -11,7 +12,8 @@ namespace WorkSharp.DAL.Mappers
     {
         public MapperProfile()
         {
-            CreateMap<DbProject, ProjectViewModel>();
+            CreateMap<DbProject, ProjectViewModel>().ReverseMap();
+            CreateMap<DbUser, RegisterViewModel>().ReverseMap();
         }
         //MapperConfiguration ProfileConfig = new MapperConfiguration(cfg => cfg.CreateMap<Domain.Models.Profile, DbProfile>().ForMember(dest => dest.UserId, opt => opt.MapFrom(source => source.User.Id)).ReverseMap());
         //MapperConfiguration ProjectConfig = new MapperConfiguration(cfg => cfg.CreateMap<Project, DbProject>().ForMember(dest => dest.CreatorId, opt => opt.MapFrom(source => source.Creator.Id)).ReverseMap());
