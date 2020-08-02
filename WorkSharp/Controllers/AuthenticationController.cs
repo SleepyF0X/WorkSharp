@@ -11,13 +11,13 @@ using WorkSharp.ViewModels.Authentication;
 
 namespace WorkSharp.Controllers
 {
-    public class Authentication : Controller
+    public class AuthenticationController : Controller
     {
         private IMapper _mapper;
         private UserManager<DbUser> _userManager;
         private SignInManager<DbUser> _signInManager;
 
-        public Authentication(IMapper mapper, UserManager<DbUser> userManager, SignInManager<DbUser> signInManager)
+        public AuthenticationController(IMapper mapper, UserManager<DbUser> userManager, SignInManager<DbUser> signInManager)
         {
             _mapper = mapper;
             _userManager = userManager;

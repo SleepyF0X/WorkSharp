@@ -20,9 +20,9 @@ namespace WorkSharp.DAL.EFCoreRepository
             _dbSet.Add(obj);
         }
 
-        public void Delete(T obj)
+        public void Delete(Guid id)
         {
-            _dbSet.Remove(obj);
+            _dbSet.Remove(_dbSet.Find(id));
         }
 
         public IReadOnlyCollection<T> GetAll()

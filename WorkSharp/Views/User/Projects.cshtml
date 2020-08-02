@@ -1,0 +1,47 @@
+﻿@model ProjectViewModel
+@{
+    int i = 1;
+    var projects = ViewData["Projects"] as IEnumerable<ProjectViewModel>;
+}
+    <link rel="stylesheet" href="~/css/project.css" />
+<div class="col-12 d-flex justify-content-center project-form">
+    <div class="col-3 text-center">
+        <form asp-controller="UserProjects" asp-action="CreateProject">
+            <label>Project Name</label>
+            <input class="form-control" type="text" asp-for="Name" /><br />
+            <label>Project Info</label>
+            <input class="form-control" type="text" asp-for="Info" /><br />
+            <button type="submit" class="btn-primary">Add Project</button>
+        </form>
+    </div>
+</div>
+<div class="col-12 text-center main">
+    <div class="container">
+        <table class="table project-table">
+            <thead>
+            <tr>
+                <th scope="col" class="number">#</th>
+                <th scope="col" class="name">Name</th>
+                <th scope="col" class="info">Info</th>
+                <th scope="col" class="remove">Remove</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (ProjectViewModel project in projects)
+            {
+                <tr>
+                    <th scope="row">@i</th>
+                    <td>@project.Name</td>
+                    <td>@project.Info</td>
+                    <td>
+                        <a asp-controller="UserProjects" asp-action="RemoveProject" asp-route-id="@project.Id" class="btn btn-info btn-lg">
+                            <span class="glyphicon glyphicon-remove"></span> Remove
+                        </a>
+                    </td>
+                </tr>
+                i++;
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
