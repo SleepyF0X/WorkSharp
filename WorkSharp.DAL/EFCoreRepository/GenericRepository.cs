@@ -10,7 +10,6 @@ namespace WorkSharp.DAL.EFCoreRepository
     {
         private WorkSharpDbContext _context;
         private DbSet<T> _dbSet;
-
         public GenericRepository(WorkSharpDbContext context)
         {
             _context = context;
@@ -21,9 +20,9 @@ namespace WorkSharp.DAL.EFCoreRepository
             _dbSet.Add(obj);
         }
 
-        public void Delete(T obj)
+        public void Delete(Guid id)
         {
-            _dbSet.Remove(obj);
+            _dbSet.Remove(_dbSet.Find(id));
         }
 
         public IReadOnlyCollection<T> GetAll()

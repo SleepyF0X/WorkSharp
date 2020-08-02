@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -22,9 +23,7 @@ namespace WorkSharp.Controllers
         }
         public IActionResult Index()
         {
-            IReadOnlyCollection<DbProject> projects = _repository.GetAll();
-            IReadOnlyCollection<ProjectViewModel> projectViewModels = _mapper.Map<IReadOnlyCollection<ProjectViewModel>>(projects);
-            return View(projectViewModels);
+            return View();
         }
     }
 }

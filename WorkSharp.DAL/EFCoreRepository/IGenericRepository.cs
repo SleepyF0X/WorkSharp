@@ -7,7 +7,7 @@ namespace WorkSharp.DAL.EFCoreRepository
     public interface IGenericRepository<T> where T : class
     {
         public void Create(T obj);
-        public void Delete(T obj);
+        public void Delete(Guid id);
         public IReadOnlyCollection<T> GetAll();
         public T GetById(Guid id);
         public void Update(T obj);

@@ -11,6 +11,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using WorkSharp.DAL;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using WorkSharp.DAL.DbModels;
 using WorkSharp.DAL.Mappers;
 using WorkSharp.DAL.EFCoreRepository;
 
@@ -22,11 +24,13 @@ namespace WorkSharp
         public Startup(IConfiguration configuration) => Configuration = configuration;
         public void ConfigureServices(IServiceCollection services)
         {
-            string ConnectionString = Configuration.GetConnectionString("Connection");
-            services.AddDbContext<WorkSharpDbContext>(options => options.UseSqlServer(ConnectionString));
+            var connectionString = Configuration.GetConnectionString("Connection");
+            services.AddDbContext<WorkSharpDbContext>(options => options.UseSqlServer(connectionString));
             services.AddAutoMapper(typeof(MapperProfile));
             services.AddMvc();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddIdentity<DbUser, IdentityRole>()
+                .AddEntityFrameworkStores<WorkSharpDbContext>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -38,6 +42,8 @@ namespace WorkSharp
 
             app.UseRouting();
             app.UseStaticFiles();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

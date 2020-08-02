@@ -1,0 +1,13 @@
+﻿@model WorkSharp.ViewModels.Authentication.RegisterViewModel
+<html>
+<head><title>ahah</title></head>
+<body>
+<h1>Register</h1>
+<form asp-controller="Authentication" asp-action="Register">
+    <input type="text" asp-for="UserName" placeholder="Login"/>
+    <input type="text" asp-for="Email" placeholder="Email">
+    <input type="text" asp-for="Password" placeholder="Password"/>
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>
