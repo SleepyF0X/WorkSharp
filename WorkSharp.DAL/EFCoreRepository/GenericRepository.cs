@@ -3,10 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using WorkSharp.DAL.DbModels;
 
 namespace WorkSharp.DAL.EFCoreRepository
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class 
+    public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         private WorkSharpDbContext _context;
         private DbSet<T> _dbSet;
@@ -36,9 +37,8 @@ namespace WorkSharp.DAL.EFCoreRepository
         }
 
         public void Update(T obj)
-        {
-            _dbSet.Attach(obj);
-            _context.Entry(obj).State = EntityState.Modified;
+        { 
+            _dbSet.Update(obj);
         }
         public void Save()
         {
