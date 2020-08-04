@@ -44,5 +44,18 @@ namespace WorkSharp.Controllers
             var model = _mapper.Map<ProjectViewModel>(_repository.GetById(id));
             return View("~/Views/User/Project.cshtml", model);
         }
+
+        public IActionResult GetEditProject(Guid id)
+        {
+            var model = _mapper.Map<ProjectViewModel>(_repository.GetById(id));
+            return View("~/Views/User/EditProject.cshtml", model);
+        }
+
+        public IActionResult EditProject(ProjectViewModel model)
+        {
+            _repository.Update(_mapper.Map<DbProject>(model));
+            _repository.Save();
+            return RedirectToAction("Project", new {id = model.Id});
+        }
     }
 }

@@ -1,18 +1,3 @@
-﻿.project-form {
-    margin-top: 100px;
-}
-.project-table {
-    margin-top: 200px;
-}
-table .number {
-    width: 10%
-}
-table .name {
-    width: 30%;
-}
-table .info {
-    width: 50%;
-}
-table .remove {
-    width: 10%;
+﻿.project-info {
+    margin-top: 300px;
 }
