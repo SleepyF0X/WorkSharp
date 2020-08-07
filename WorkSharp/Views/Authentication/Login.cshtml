@@ -1,14 +1,13 @@
-﻿@model WorkSharp.ViewModels.Authentication.LoginViewModel
-    <html>
-    <head>
-        <title>ahah</title>
-    </head>
-    <body>
-        <h1>Register</h1>
-        <form asp-controller="Authentication" asp-action="Login">
-            <input type="text" asp-for="Login" placeholder="Login" />
-            <input type="text" asp-for="Password" placeholder="Password" />
-            <button type="submit">Submit</button>
+﻿@model LoginViewModel
+<link rel="stylesheet" href="~/css/authentication/login.css" />
+<div class="container d-flex justify-content-center">
+    <div class="login-form d-flex align-items-center flex-column">
+        <h1>Sign In</h1>
+        <form asp-controller="Authentication" asp-action="Login" class="d-flex align-items-center flex-column">
+            <input type="text" class="form-control" asp-for="Login" placeholder="Login" /><br />
+            <input type="password" class="form-control" asp-for="Password" placeholder="Password" /><br />
+            <div asp-validation-summary="All"></div>
+            <button type="submit" class="btn btn-primary">Go ;)</button>
         </form>
-    </body>
-    </html>
+    </div>
+</div>

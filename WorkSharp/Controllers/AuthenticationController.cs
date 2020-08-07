@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WorkSharp.DAL.DbModels;
@@ -39,17 +40,13 @@ namespace WorkSharp.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             DbUser user = new DbUser
-                {
-                    UserName = model.UserName,
-                    Email = model.Email
-                };
-                var result = await _userManager.CreateAsync(user, model.Password);
-                //if (result.Succeeded)
-                //{
-                //    await _signInManager.SignInAsync(user, false);
-                //}
-                
-                return RedirectToAction("Login", "Authentication");
+            {
+                UserName = model.UserName,
+                Email = model.Email
+            };
+            await _userManager.CreateAsync(user, model.Password);
+
+            return RedirectToAction("Login", "Authentication");
         }
 
         [HttpPost]
@@ -59,7 +56,25 @@ namespace WorkSharp.Controllers
             {
                 UserName = model.Login
             };
-            //_signInManager.SignInAsync(user, model.Password);
+            if (ModelState.IsValid)
+            {
+                var result =
+                    await _signInManager.PasswordSignInAsync(model.Login, model.Password, false, false);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Main");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Неправильный логин и (или) пароль");
+                }
+            }
+            return View("Login", model);
+        }
+        [Authorize]
+        public async Task<IActionResult> LogOut()
+        {
+            await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Main");
         }
     }
