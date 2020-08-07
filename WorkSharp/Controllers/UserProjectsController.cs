@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkSharp.DAL.DbModels;
 using WorkSharp.DAL.EFCoreRepository;
@@ -19,10 +20,11 @@ namespace WorkSharp.Controllers
             _repository = repository;
             _mapper = mapper;
         }
+        [Authorize]
         public IActionResult Projects()
         {
             ViewData["Projects"] = _mapper.Map<IEnumerable<ProjectViewModel>>(_repository.GetAll());
-            return View("~/Views/User/Projects.cshtml");
+            return View("~/Views/User/Projects/Projects.cshtml");
         }
 
         public IActionResult CreateProject(ProjectViewModel projectViewModel)
@@ -42,13 +44,13 @@ namespace WorkSharp.Controllers
         public IActionResult Project(Guid id)
         {
             var model = _mapper.Map<ProjectViewModel>(_repository.GetById(id));
-            return View("~/Views/User/Project.cshtml", model);
+            return View("~/Views/User/Projects/Project.cshtml", model);
         }
 
         public IActionResult GetEditProject(Guid id)
         {
             var model = _mapper.Map<ProjectViewModel>(_repository.GetById(id));
-            return View("~/Views/User/EditProject.cshtml", model);
+            return View("~/Views/User/Projects/EditProject.cshtml", model);
         }
 
         public IActionResult EditProject(ProjectViewModel model)

@@ -29,8 +29,18 @@ namespace WorkSharp
             services.AddAutoMapper(typeof(MapperProfile));
             services.AddMvc();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            services.AddIdentity<DbUser, IdentityRole>()
-                .AddEntityFrameworkStores<WorkSharpDbContext>();
+            services.AddIdentity<DbUser, IdentityRole>().AddEntityFrameworkStores<WorkSharpDbContext>();
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequiredUniqueChars = 3;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+            });
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Authentication/Login";
+                options.AccessDeniedPath = "/InStartupLook";
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
