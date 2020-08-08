@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -39,35 +42,31 @@ namespace WorkSharp.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            DbUser user = new DbUser
+            if (!ModelState.IsValid) return View("Register", model);
+            DbUser user = _mapper.Map<DbUser>(model);
+            var claims = new List<Claim>
             {
-                UserName = model.UserName,
-                Email = model.Email
+                new Claim("Name", model.UserName),
+                new Claim("Email", model.Email)
             };
             await _userManager.CreateAsync(user, model.Password);
+            await _userManager.AddClaimsAsync(user, claims);
 
-            return RedirectToAction("Login", "Authentication");
+            return RedirectToAction("Login");
         }
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            DbUser user = new DbUser
+            if (!ModelState.IsValid) return View("Login", model);
+            var result = await _signInManager.PasswordSignInAsync(model.Login, model.Password, false, false);
+            if (result.Succeeded)
             {
-                UserName = model.Login
-            };
-            if (ModelState.IsValid)
+                return RedirectToAction("Index", "Main");
+            }
+            else
             {
-                var result =
-                    await _signInManager.PasswordSignInAsync(model.Login, model.Password, false, false);
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("Index", "Main");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Неправильный логин и (или) пароль");
-                }
+                ModelState.AddModelError("", "Неправильный логин и (или) пароль");
             }
             return View("Login", model);
         }

@@ -3,11 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
 using WorkSharp.DAL.DbModels;
 
 namespace WorkSharp.DAL
 {
-    public class WorkSharpDbContext : IdentityDbContext<DbUser>
+    public class WorkSharpDbContext : IdentityDbContext<DbUser, DbRole, Guid>
     {
         public DbSet<DbProfile> Profiles { get; set; }
         public DbSet<DbProject> Projects { get; set; }

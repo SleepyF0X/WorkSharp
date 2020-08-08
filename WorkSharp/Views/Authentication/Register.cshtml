@@ -4,9 +4,10 @@
         <div class="register-form d-flex align-items-center flex-column">
             <h1>Register</h1>
             <form asp-controller="Authentication" asp-action="Register" class="d-flex align-items-center flex-column">
-                <input type="text" asp-for="UserName" class="form-control" placeholder="Login" /><br/>
-                <input type="email" asp-for="Email" class="form-control" placeholder="Email"><br/>
-                <input type="password" asp-for="Password" class="form-control" placeholder="Password" /><br/>
+                <input type="text" asp-for="UserName" class="form-control" placeholder="Login" /><br />
+                <input type="email" asp-for="Email" class="form-control" placeholder="Email"><br />
+                <input type="password" asp-for="Password" class="form-control" placeholder="Password" /><br />
+                <div asp-validation-summary="All"></div>
                 <button type="submit" class="btn btn-primary">Register</button>
             </form>
         </div>
