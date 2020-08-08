@@ -29,12 +29,13 @@ namespace WorkSharp
             services.AddAutoMapper(typeof(MapperProfile));
             services.AddMvc();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            services.AddIdentity<DbUser, IdentityRole>().AddEntityFrameworkStores<WorkSharpDbContext>();
+            services.AddIdentity<DbUser, DbRole>().AddEntityFrameworkStores<WorkSharpDbContext>();
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequiredUniqueChars = 3;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
+                options.User.RequireUniqueEmail = true;
             });
             services.ConfigureApplicationCookie(options =>
             {
