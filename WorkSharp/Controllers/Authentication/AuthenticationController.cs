@@ -17,9 +17,9 @@ namespace WorkSharp.Controllers
 {
     public class AuthenticationController : Controller
     {
-        private IMapper _mapper;
-        private UserManager<DbUser> _userManager;
-        private SignInManager<DbUser> _signInManager;
+        private readonly IMapper _mapper;
+        private readonly UserManager<DbUser> _userManager;
+        private readonly SignInManager<DbUser> _signInManager;
 
         public AuthenticationController(IMapper mapper, UserManager<DbUser> userManager, SignInManager<DbUser> signInManager)
         {
@@ -43,7 +43,7 @@ namespace WorkSharp.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid) return View("Register", model);
-            DbUser user = _mapper.Map<DbUser>(model);
+            var user = _mapper.Map<DbUser>(model);
             var claims = new List<Claim>
             {
                 new Claim("Name", model.UserName),
