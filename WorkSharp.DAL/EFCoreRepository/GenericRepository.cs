@@ -37,12 +37,18 @@ namespace WorkSharp.DAL.EFCoreRepository
         }
 
         public void Update(T obj)
-        { 
+        {
+            //_context.Entry(obj).State = EntityState.Modified;
             _dbSet.Update(obj);
         }
         public void Save()
         {
             _context.SaveChanges();
+        }
+
+        public void Detach(T obj)
+        {
+            _context.Entry(obj).State = EntityState.Detached;
         }
     }
 }

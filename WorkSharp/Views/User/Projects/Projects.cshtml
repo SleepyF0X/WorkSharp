@@ -31,10 +31,10 @@
             {
                 <tr>
                     <th scope="row">@i</th>
-                    <td><a asp-controller="UserProjects" asp-action="Project" asp-route-id="@project.Id">@project.Name</a></td>
+                    <td><a asp-controller="UserProjects" asp-action="Project" asp-route-projectId="@project.Id">@project.Name</a></td>
                     <td>@project.Info</td>
                     <td>
-                        <a asp-controller="UserProjects" asp-action="RemoveProject" asp-route-id="@project.Id" class="btn btn-info btn-lg">
+                        <a asp-controller="UserProjects" asp-action="RemoveProject" asp-route-projectId="@project.Id" class="btn btn-info btn-lg">
                             <span class="glyphicon glyphicon-remove"></span> Remove
                         </a>
                     </td>

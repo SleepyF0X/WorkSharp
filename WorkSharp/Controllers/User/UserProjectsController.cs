@@ -41,11 +41,11 @@ namespace WorkSharp.Controllers.User
             return RedirectToAction("Projects");
         }
 
-        public IActionResult RemoveProject(Guid id)
+        public IActionResult RemoveProject(Guid projectId)
         {
-            if (CheckAccess(id))
+            if (CheckAccess(projectId))
             {
-                _repository.Delete(id);
+                _repository.Delete(projectId);
                 _repository.Save();
                 return RedirectToAction("Projects");
             }
@@ -69,11 +69,11 @@ namespace WorkSharp.Controllers.User
             }
         }
 
-        public IActionResult GetEditProject(Guid id)
+        public IActionResult GetEditProject(Guid projectId)
         {
-            if (CheckAccess(id))
+            if (CheckAccess(projectId))
             {
-                var dbProject = _repository.GetById(id);
+                var dbProject = _repository.GetById(projectId);
                 var projectViewModel = _mapper.Map<ProjectViewModel>(dbProject);
                 return View("~/Views/User/Projects/EditProject.cshtml", projectViewModel);
             }
@@ -87,10 +87,11 @@ namespace WorkSharp.Controllers.User
         {
             if (CheckAccess(model.Id))
             {
+                model.CreatorId = _userManager.GetUserAsync(HttpContext.User).Result.Id;
                 var dbProject = _mapper.Map<DbProject>(model);
                 _repository.Update(dbProject);
                 _repository.Save();
-                return RedirectToAction("Project", new { id = model.Id });
+                return RedirectToAction("Project", new { projectId = model.Id });
             }
             else
             {
@@ -101,9 +102,11 @@ namespace WorkSharp.Controllers.User
         private bool CheckAccess(Guid projectId)
         {
             var userId = _userManager.GetUserAsync(HttpContext.User).Result.Id;
-            var projectCreatorId = _repository.GetById(projectId).CreatorId;
+            var dbProject = _repository.GetById(projectId);
+            var projectCreatorId = dbProject.CreatorId;
             if (projectCreatorId.Equals(userId))
             {
+                _repository.Detach(dbProject);
                 return true;
             }
             else

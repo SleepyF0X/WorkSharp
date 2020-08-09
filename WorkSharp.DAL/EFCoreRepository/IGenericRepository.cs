@@ -12,5 +12,6 @@ namespace WorkSharp.DAL.EFCoreRepository
         public T GetById(Guid id);
         public void Update(T obj);
         public void Save();
+        public void Detach(T obj);
     }
 }
