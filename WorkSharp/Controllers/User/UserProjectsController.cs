@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -10,14 +9,14 @@ using WorkSharp.DAL.DbModels;
 using WorkSharp.DAL.EFCoreRepository;
 using WorkSharp.ViewModels;
 
-namespace WorkSharp.Controllers
+namespace WorkSharp.Controllers.User
 {
     [Authorize]
     public class UserProjectsController : Controller
     {
         private readonly IGenericRepository<DbProject> _repository;
-        private IMapper _mapper;
-        private UserManager<DbUser> _userManager;
+        private readonly IMapper _mapper;
+        private readonly UserManager<DbUser> _userManager;
         public UserProjectsController(IGenericRepository<DbProject> repository, IMapper mapper, UserManager<DbUser> userManager)
         {
             _repository = repository;
@@ -27,23 +26,26 @@ namespace WorkSharp.Controllers
         public IActionResult Projects()
         {
             var userId = _userManager.GetUserAsync(HttpContext.User).Result.Id;
-            ViewData["Projects"] = _mapper.Map<IEnumerable<ProjectViewModel>>(_repository.GetAll().Where(project => project.CreatorId.Equals(userId)));
+            var dbProjects = _repository.GetAll().Where(project => project.CreatorId.Equals(userId));
+            var projectViewModels = _mapper.Map<IEnumerable<ProjectViewModel>>(dbProjects);
+            ViewData["Projects"] = projectViewModels;
             return View("~/Views/User/Projects/Projects.cshtml");
         }
 
         public IActionResult CreateProject(ProjectViewModel projectViewModel)
         {
             projectViewModel.CreatorId = _userManager.GetUserAsync(HttpContext.User).Result.Id;
-            _repository.Create(_mapper.Map<DbProject>(projectViewModel));
+            var dbProject = _mapper.Map<DbProject>(projectViewModel);
+            _repository.Create(dbProject);
             _repository.Save();
             return RedirectToAction("Projects");
         }
 
-        public IActionResult RemoveProject(Guid id)
+        public IActionResult RemoveProject(Guid projectId)
         {
-            if (CheckAccess(id))
+            if (CheckAccess(projectId))
             {
-                _repository.Delete(id);
+                _repository.Delete(projectId);
                 _repository.Save();
                 return RedirectToAction("Projects");
             }
@@ -57,8 +59,9 @@ namespace WorkSharp.Controllers
         {
             if (CheckAccess(projectId))
             {
-                var model = _mapper.Map<ProjectViewModel>(_repository.GetById(projectId));
-                return View("~/Views/User/Projects/Project.cshtml", model);
+                var dbProject = _repository.GetById(projectId);
+                var projectViewModel = _mapper.Map<ProjectViewModel>(dbProject);
+                return View("~/Views/User/Projects/Project.cshtml", projectViewModel);
             }
             else
             {
@@ -66,12 +69,13 @@ namespace WorkSharp.Controllers
             }
         }
 
-        public IActionResult GetEditProject(Guid id)
+        public IActionResult GetEditProject(Guid projectId)
         {
-            if (CheckAccess(id))
+            if (CheckAccess(projectId))
             {
-                var model = _mapper.Map<ProjectViewModel>(_repository.GetById(id));
-                return View("~/Views/User/Projects/EditProject.cshtml", model);
+                var dbProject = _repository.GetById(projectId);
+                var projectViewModel = _mapper.Map<ProjectViewModel>(dbProject);
+                return View("~/Views/User/Projects/EditProject.cshtml", projectViewModel);
             }
             else
             {
@@ -83,9 +87,11 @@ namespace WorkSharp.Controllers
         {
             if (CheckAccess(model.Id))
             {
-                _repository.Update(_mapper.Map<DbProject>(model));
+                model.CreatorId = _userManager.GetUserAsync(HttpContext.User).Result.Id;
+                var dbProject = _mapper.Map<DbProject>(model);
+                _repository.Update(dbProject);
                 _repository.Save();
-                return RedirectToAction("Project", new { id = model.Id });
+                return RedirectToAction("Project", new { projectId = model.Id });
             }
             else
             {
@@ -96,9 +102,11 @@ namespace WorkSharp.Controllers
         private bool CheckAccess(Guid projectId)
         {
             var userId = _userManager.GetUserAsync(HttpContext.User).Result.Id;
-            var projectCreatorId = _repository.GetById(projectId).CreatorId;
+            var dbProject = _repository.GetById(projectId);
+            var projectCreatorId = dbProject.CreatorId;
             if (projectCreatorId.Equals(userId))
             {
+                _repository.Detach(dbProject);
                 return true;
             }
             else

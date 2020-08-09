@@ -28,7 +28,7 @@ namespace WorkSharp
             services.AddDbContext<WorkSharpDbContext>(options => options.UseSqlServer(connectionString));
             services.AddAutoMapper(typeof(MapperProfile));
             services.AddMvc();
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddIdentity<DbUser, DbRole>().AddEntityFrameworkStores<WorkSharpDbContext>();
             services.Configure<IdentityOptions>(options =>
             {
