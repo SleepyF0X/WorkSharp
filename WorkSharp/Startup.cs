@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Identity;
 using WorkSharp.DAL.DbModels;
 using WorkSharp.DAL.Mappers;
 using WorkSharp.DAL.EFCoreRepository;
+using WorkSharp.DAL.EFCoreRepository.EntityRepositories;
+using WorkSharp.DAL.EFCoreRepository.IEntityRepositories;
 
 namespace WorkSharp
 {
@@ -28,7 +30,7 @@ namespace WorkSharp
             services.AddDbContext<WorkSharpDbContext>(options => options.UseSqlServer(connectionString));
             services.AddAutoMapper(typeof(MapperProfile));
             services.AddMvc();
-            services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddTransient<IProjectRepository, ProjectRepository>();
             services.AddIdentity<DbUser, DbRole>().AddEntityFrameworkStores<WorkSharpDbContext>();
             services.Configure<IdentityOptions>(options =>
             {

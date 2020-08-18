@@ -14,13 +14,6 @@ namespace WorkSharp.Controllers
 {
     public class MainController : Controller
     {
-        private readonly IGenericRepository<DbProject> _repository;
-        private IMapper _mapper;
-        public MainController(IGenericRepository<DbProject> repository, IMapper mapper)
-        {
-            _repository = repository;
-            _mapper = mapper;
-        }
         public IActionResult Index()
         {
             return View();
