@@ -1,11 +1,89 @@
-﻿@model ProjectViewModel
+﻿@model WorkSharp.ViewModels.User.TaskBoardViewModel
+@{
+    var i = 1;
+    var project = ViewData["Project"] as ProjectViewModel;
+}
 <link rel="stylesheet" href="~/css/projects/project.css" />
+<script
+    src="https://code.jquery.com/jquery-3.5.1.min.js"
+    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <div class="container d-flex justify-content-center project-info">
     <div>
-        <h1>Name: @Model.Name</h1><br />
-        <h2>Info: @Model.Info</h2><br />
-        <a asp-controller="UserProjects" asp-action="GetEditProject" asp-route-projectId="@Model.Id" class="btn btn-info btn-lg">
+        <h1>Name: @project.Name</h1><br />
+        <h2>Info: @project.Info</h2><br />
+        <a asp-controller="Projects" asp-action="GetEditProject" asp-route-projectId="@project.Id" class="btn btn-info btn-lg">
             <span class="glyphicon glyphicon-remove"></span> Edit
         </a>
+    </div>
+    <table class="table project-table">
+        <thead>
+        <tr>
+            <th scope="col" class="number">#</th>
+            <th scope="col" class="name">Name</th>
+            <th scope="col" class="remove">Remove</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var taskBoard in project.TaskBoardViewModels)
+        {
+            <tr>
+                <th scope="row">@i</th>
+                <td><a asp-controller="TaskBoards" asp-action="TaskBoard" asp-route-taskBoardId="@taskBoard.Id">@taskBoard.Name</a></td>
+                <td>
+                    <a asp-controller="TaskBoards" asp-action="RemoveTaskBoard" asp-route-taskBoardId="@taskBoard.Id" class="btn btn-info btn-lg">
+                        <span class="glyphicon glyphicon-remove"></span> Remove
+                    </a>
+                </td>
+            </tr>
+            i++;
+        }
+        </tbody>
+    </table>
+    <div class="wrap">
+        <h1>Bootstrap Modal Example</h1>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-new">
+            open modal
+        </button>
+    </div>
+ 
+    <div class="modal fade bs-example-modal-new" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  
+        <div class="modal-dialog">
+    
+            <!-- Modal Content: begins -->
+            <div class="modal-content">
+      
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="gridSystemModalLabel">Your Headings</h4>
+                </div>
+    
+                <!-- Modal Body -->  
+                <form asp-controller="TaskBoards" asp-action="CreateTaskBoard" asp-route-ProjectId="@project.Id">
+                    <div class="modal-body">
+                        <div class="body-message">
+                            <h4>Any Heading</h4>
+                            <label>Project Name</label>
+                            <input class="form-control" type="text" asp-for="Name" /><br />
+                            <label>Project Name</label>
+                            <input class="form-control" type="text" asp-for="Type" /><br />
+                        </div>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+    
+            </div>
+            <!-- Modal Content: ends -->
+    
+        </div>
+  
     </div>
 </div>

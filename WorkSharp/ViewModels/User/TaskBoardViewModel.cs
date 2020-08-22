@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace WorkSharp.DAL.DbModels
+namespace WorkSharp.ViewModels.User
 {
-    public class DbTaskBoard
+    public class TaskBoardViewModel
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
         public Guid ProjectId { get; set; }
-        public DbProject Project { get; set; }
         public string Type { get; set; }
-        public IReadOnlyCollection<DbTask> Tasks { get; set; }
+        public IReadOnlyCollection<TaskViewModel> TaskViewModels { get; set; }
     }
 }
