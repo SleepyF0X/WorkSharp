@@ -1,7 +1,7 @@
-﻿@model ProjectViewModel
+﻿@model WorkSharp.ViewModels.User.ProjectViewModel
 <link rel="stylesheet" href="~/css/projects/project.css" />
 <div class="container d-flex justify-content-center project-info">
-    <form asp-controller="UserProjects">
+    <form asp-controller="Projects">
         <label>Project Name</label>
         <input class="form-control" type="text" asp-for="Name" value="@Model.Name"/><br/>
         <label>Project Info</label>

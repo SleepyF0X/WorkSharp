@@ -9,16 +9,17 @@ using WorkSharp.DAL.DbModels;
 using WorkSharp.DAL.EFCoreRepository;
 using WorkSharp.DAL.EFCoreRepository.IEntityRepositories;
 using WorkSharp.ViewModels;
+using WorkSharp.ViewModels.User;
 
 namespace WorkSharp.Controllers.User
 {
     [Authorize]
-    public class UserProjectsController : Controller
+    public class ProjectsController : Controller
     {
         private readonly IProjectRepository _repository;
         private readonly IMapper _mapper;
         private readonly UserManager<DbUser> _userManager;
-        public UserProjectsController(IProjectRepository repository, IMapper mapper, UserManager<DbUser> userManager)
+        public ProjectsController(IProjectRepository repository, IMapper mapper, UserManager<DbUser> userManager)
         {
             _repository = repository;
             _mapper = mapper;
@@ -64,7 +65,8 @@ namespace WorkSharp.Controllers.User
             if (dbProject != null)
             {
                 var projectViewModel = _mapper.Map<ProjectViewModel>(dbProject);
-                return View("~/Views/User/Projects/Project.cshtml", projectViewModel);
+                ViewData["Project"] = projectViewModel;
+                return View("~/Views/User/Projects/Project.cshtml");
             }
             else
             {

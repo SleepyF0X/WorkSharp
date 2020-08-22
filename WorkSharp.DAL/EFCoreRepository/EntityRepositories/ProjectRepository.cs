@@ -25,7 +25,7 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
 
         public IReadOnlyCollection<DbProject> GetUserProjects(Guid userId)
         {
-            var userProjects = _dbSet.AsNoTracking().Where(proj => proj.CreatorId.Equals(userId)).ToList().AsReadOnly();
+            var userProjects = _dbSet.AsNoTracking().Where(proj => proj.CreatorId.Equals(userId)).Include(source => source.TaskBoards).ToList().AsReadOnly();
             return userProjects;
         }
 

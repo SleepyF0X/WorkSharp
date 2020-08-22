@@ -13,10 +13,10 @@ using WorkSharp.DAL;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using WorkSharp.DAL.DbModels;
-using WorkSharp.DAL.Mappers;
 using WorkSharp.DAL.EFCoreRepository;
 using WorkSharp.DAL.EFCoreRepository.EntityRepositories;
 using WorkSharp.DAL.EFCoreRepository.IEntityRepositories;
+using WorkSharp.Mappers;
 
 namespace WorkSharp
 {
@@ -31,6 +31,7 @@ namespace WorkSharp
             services.AddAutoMapper(typeof(MapperProfile));
             services.AddMvc();
             services.AddTransient<IProjectRepository, ProjectRepository>();
+            services.AddTransient<ITaskBoardRepository, TaskBoardRepository>();
             services.AddIdentity<DbUser, DbRole>().AddEntityFrameworkStores<WorkSharpDbContext>();
             services.Configure<IdentityOptions>(options =>
             {
