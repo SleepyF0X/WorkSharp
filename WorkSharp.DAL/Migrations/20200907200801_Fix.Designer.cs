@@ -10,8 +10,8 @@ using WorkSharp.DAL;
 namespace WorkSharp.DAL.Migrations
 {
     [DbContext(typeof(WorkSharpDbContext))]
-    [Migration("20200822172604_InitAgain")]
-    partial class InitAgain
+    [Migration("20200907200801_Fix")]
+    partial class Fix
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -128,9 +128,6 @@ namespace WorkSharp.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CreatorId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Info")
                         .HasColumnType("nvarchar(max)");
 
@@ -176,14 +173,8 @@ namespace WorkSharp.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("DbTaskBoardId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTimeOffset>("Deadline")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid>("ExecutorId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Info")
                         .HasColumnType("nvarchar(max)");
@@ -196,7 +187,7 @@ namespace WorkSharp.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DbTaskBoardId");
+                    b.HasIndex("TaskBoardId");
 
                     b.ToTable("Tasks");
                 });
@@ -229,16 +220,18 @@ namespace WorkSharp.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Info")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("Teams");
                 });
@@ -309,6 +302,21 @@ namespace WorkSharp.DAL.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("WorkSharp.DAL.DbModels.Relations.DbTeamMembers", b =>
+                {
+                    b.Property<Guid>("MemberId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TeamId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("MemberId", "TeamId");
+
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("DbTeamMembers");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("WorkSharp.DAL.DbModels.DbRole", null)
@@ -362,9 +370,11 @@ namespace WorkSharp.DAL.Migrations
 
             modelBuilder.Entity("WorkSharp.DAL.DbModels.DbTask", b =>
                 {
-                    b.HasOne("WorkSharp.DAL.DbModels.DbTaskBoard", null)
+                    b.HasOne("WorkSharp.DAL.DbModels.DbTaskBoard", "TaskBoard")
                         .WithMany("Tasks")
-                        .HasForeignKey("DbTaskBoardId");
+                        .HasForeignKey("TaskBoardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WorkSharp.DAL.DbModels.DbTaskBoard", b =>
@@ -372,6 +382,30 @@ namespace WorkSharp.DAL.Migrations
                     b.HasOne("WorkSharp.DAL.DbModels.DbProject", "Project")
                         .WithMany("TaskBoards")
                         .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WorkSharp.DAL.DbModels.DbTeam", b =>
+                {
+                    b.HasOne("WorkSharp.DAL.DbModels.DbProject", "Project")
+                        .WithMany("Teams")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WorkSharp.DAL.DbModels.Relations.DbTeamMembers", b =>
+                {
+                    b.HasOne("WorkSharp.DAL.DbModels.DbUser", "Member")
+                        .WithMany("TeamMembers")
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WorkSharp.DAL.DbModels.DbTeam", "Team")
+                        .WithMany("TeamMembers")
+                        .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -32,6 +32,7 @@ namespace WorkSharp
             services.AddMvc();
             services.AddTransient<IProjectRepository, ProjectRepository>();
             services.AddTransient<ITaskBoardRepository, TaskBoardRepository>();
+            services.AddTransient<ITeamRepository, TeamRepository>();
             services.AddIdentity<DbUser, DbRole>().AddEntityFrameworkStores<WorkSharpDbContext>();
             services.Configure<IdentityOptions>(options =>
             {

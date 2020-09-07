@@ -6,7 +6,7 @@
         <input class="form-control" type="text" asp-for="Name" value="@Model.Name"/><br/>
         <label>Project Info</label>
         <input class="form-control" type="text" asp-for="Info" value="@Model.Info"/><br/>
-        <button type="submit" class="btn-primary" asp-action="EditProject" asp-route-id="@Model.Id">Save</button>
-        <button type="submit" class="btn-danger" asp-action="Project", asp-route-projectId="@Model.Id">Cancel</button>
+        <button type="submit" class="btn btn-primary" asp-action="EditProject" asp-route-id="@Model.Id">Save</button>
+        <button type="submit" class="btn btn-danger" asp-action="Project", asp-route-projectId="@Model.Id">Cancel</button>
     </form>
 </div>
