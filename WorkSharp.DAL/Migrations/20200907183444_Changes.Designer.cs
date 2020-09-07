@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WorkSharp.DAL;
 
 namespace WorkSharp.DAL.Migrations
 {
     [DbContext(typeof(WorkSharpDbContext))]
-    partial class WorkSharpDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200907183444_Changes")]
+    partial class Changes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -247,6 +249,9 @@ namespace WorkSharp.DAL.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("DbProjectId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
@@ -288,6 +293,8 @@ namespace WorkSharp.DAL.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DbProjectId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -391,6 +398,13 @@ namespace WorkSharp.DAL.Migrations
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("WorkSharp.DAL.DbModels.DbUser", b =>
+                {
+                    b.HasOne("WorkSharp.DAL.DbModels.DbProject", null)
+                        .WithMany("Members")
+                        .HasForeignKey("DbProjectId");
                 });
 
             modelBuilder.Entity("WorkSharp.DAL.DbModels.Relations.DbTeamMembers", b =>

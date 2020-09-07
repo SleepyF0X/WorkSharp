@@ -12,7 +12,7 @@ namespace WorkSharp.DAL.EFCoreRepository.IEntityRepositories
         public IReadOnlyCollection<DbProject> GetUserProjects(Guid userId);
         public DbProject GetByIdSecure(Guid id, Guid userId);
         public bool DeleteSecure(Guid id, Guid userId);
-        public void Create(DbProject dbProject);
+        public void Create(DbProject dbProject, Guid memberId);
         public bool UpdateSecure(DbProject dbProject, Guid userId);
         public void Save();
     }

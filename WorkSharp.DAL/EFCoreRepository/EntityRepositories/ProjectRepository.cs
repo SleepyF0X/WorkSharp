@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using WorkSharp.DAL.DbModels;
+using WorkSharp.DAL.DbModels.Relations;
 using WorkSharp.DAL.EFCoreRepository.IEntityRepositories;
 
 namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
@@ -12,10 +13,12 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
     {
         private WorkSharpDbContext _context;
         private DbSet<DbProject> _dbSet;
-        public ProjectRepository(WorkSharpDbContext context)
+        private ITeamRepository _teamRepository;
+        public ProjectRepository(WorkSharpDbContext context, ITeamRepository teamRepository)
         {
             _context = context;
             _dbSet = _context.Projects;
+            _teamRepository = teamRepository;
         }
 
         public IReadOnlyCollection<DbProject> GetAll()
@@ -25,14 +28,16 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
 
         public IReadOnlyCollection<DbProject> GetUserProjects(Guid userId)
         {
-            var userProjects = _dbSet.AsNoTracking().Where(proj => proj.CreatorId.Equals(userId)).Include(source => source.TaskBoards).ToList().AsReadOnly();
-            return userProjects;
+            var projects = _context.Users.AsNoTracking().SelectMany(user => user.TeamMembers.Select(tm => tm.Team.Project)).ToList().AsReadOnly();
+            return projects;
         }
 
         public DbProject GetByIdSecure(Guid id, Guid userId)
         {
             var userProjects = GetUserProjects(userId);
             var project = userProjects.FirstOrDefault(project => project.Id.Equals(id));
+            project.TaskBoards = _context.TaskBoards.Where(tb => tb.ProjectId.Equals(project.Id)).ToList();
+            project.Teams = _context.Teams.Where(t=>t.ProjectId.Equals(project.Id)).ToList();
             return project;
         }
 
@@ -51,9 +56,23 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
             }
         }
 
-        public void Create(DbProject dbProject)
+        public void Create(DbProject dbProject, Guid memberId)
         {
-            _dbSet.Add(dbProject);
+            _dbSet.Attach(dbProject);
+            var team = new DbTeam
+            {
+                Name = "Name",
+                ProjectId = dbProject.Id,
+                TeamMembers = new List<DbTeamMembers>(),
+                Info = "null"
+            };
+            team.TeamMembers.Add(new DbTeamMembers
+            {
+                TeamId = team.Id,
+                MemberId = memberId
+            });
+            _context.Teams.Attach(team);
+            _context.SaveChanges();
         }
 
         public bool UpdateSecure(DbProject dbProject, Guid userId)
