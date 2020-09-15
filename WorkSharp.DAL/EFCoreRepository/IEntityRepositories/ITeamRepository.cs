@@ -11,6 +11,7 @@ namespace WorkSharp.DAL.EFCoreRepository.IEntityRepositories
         public void AddMember(Guid teamId, Guid memberId);
         public IReadOnlyCollection<DbTeam> GetUserTeams(Guid userId);
         public void Save();
-        public DbTeam GetByIdSecure(object taskBoardId, Guid userId);
+        public DbTeam GetByIdSecure(Guid teamId, Guid userId);
+        public bool DeleteSecure(Guid teamId, Guid userId);
     }
 }

@@ -38,7 +38,12 @@ namespace WorkSharp.Mappers
                     opt => opt.MapFrom(
                         source => source.TeamMembers.Select(tm => tm.Member)))
                 .ReverseMap();
-            //CreateMap<DbUser, UserViewModel>().ForAllMembers(opt => opt.Ignore());
+            CreateMap<DbUser, UserViewModel>()
+                .ForMember(
+                    dest => dest.Teams, 
+                    opt => opt.MapFrom(
+                        source => source.TeamMembers.Select(tm => tm.Team)))
+                .ReverseMap();
         }
     }
 }

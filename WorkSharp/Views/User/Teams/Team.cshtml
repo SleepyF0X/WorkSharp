@@ -1,5 +1,39 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model WorkSharp.ViewModels.User.TeamViewModel
 @{
+    var i = 1;
 }
+<link rel="stylesheet" href="~/css/projects/project.css" />
+<div class="container d-flex justify-content-center project-info">
+    <div>
+        <h1>Name: @Model.Name</h1><br />
+        <h2>Info: @Model.Status</h2><br />
+        @*<a asp-controller="Projects" asp-action="GetEditProject" asp-route-projectId="@Model.Id" class="btn btn-info btn-lg">
+                <span class="glyphicon glyphicon-remove"></span> Edit
+            </a>*@
+    </div>
+    <table class="table project-table">
+            <thead>
+                <tr>
+                    <th scope="col" class="number">#</th>
+                    <th scope="col" class="name">Name</th>
+                    <th scope="col" class="info">Info</th>
+                    <th scope="col" class="remove">Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var member in Model.Members)
+                {
+                    <tr>
+                        <th scope="row">@i</th>
+                        <td><a asp-controller="TaskBoards" asp-action="TaskBoard" asp-route-projectId="@member.Id">@member.UserName</a></td>
+                        <td>
+                            <a asp-controller="TaskBoards" asp-action="RemoveTaskBoard" asp-route-projectId="@member.Id" class="btn btn-info btn-lg">
+                                <span class="glyphicon glyphicon-remove"></span> Remove
+                            </a>
+                        </td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+</div>
