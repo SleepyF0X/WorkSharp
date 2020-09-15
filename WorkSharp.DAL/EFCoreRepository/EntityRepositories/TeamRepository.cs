@@ -24,11 +24,6 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
             _dbSet.Add(dbTeam);
         }
 
-        public void CreateTeam(string name, string info, Guid projectId)
-        {
-            _dbSet.Add(new DbTeam {Info = info, Name = name, ProjectId = projectId});
-        }
-
         public void AddMember(Guid teamId, Guid memberId)
         {
             var dbTeam = _dbSet.FirstOrDefault(t => t.Id.Equals(teamId));
@@ -44,6 +39,11 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
         public void Save()
         {
             _context.SaveChanges();
+        }
+
+        public DbTeam GetByIdSecure(object taskBoardId, Guid userId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
