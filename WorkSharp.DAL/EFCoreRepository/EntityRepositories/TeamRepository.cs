@@ -24,11 +24,6 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
             _dbSet.Add(dbTeam);
         }
 
-        public void CreateTeam(string name, string info, Guid projectId)
-        {
-            _dbSet.Add(new DbTeam {Info = info, Name = name, ProjectId = projectId});
-        }
-
         public void AddMember(Guid teamId, Guid memberId)
         {
             var dbTeam = _dbSet.FirstOrDefault(t => t.Id.Equals(teamId));
@@ -38,12 +33,34 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
 
         public IReadOnlyCollection<DbTeam> GetUserTeams(Guid userId)
         {
-            return _dbSet.Where(t => t.TeamMembers.Any(s => s.MemberId.Equals(userId))).ToList().AsReadOnly();
+            return _dbSet.Where(t => t.TeamMembers.Any(s => s.MemberId.Equals(userId))).AsNoTracking().Include(team => team.TeamMembers).ThenInclude(tm => tm.Member).ToList().AsReadOnly();
         }
 
         public void Save()
         {
             _context.SaveChanges();
+        }
+
+        public DbTeam GetByIdSecure(Guid teamId, Guid userId)
+        {
+            var userTeams = GetUserTeams(userId);
+            var dbTeam = userTeams.FirstOrDefault(team => team.Id.Equals(teamId));
+            return dbTeam;
+        }
+
+        public bool DeleteSecure(Guid teamId, Guid userId)
+        {
+            var userTeams = GetUserTeams(userId);
+            var dbTeam = userTeams.FirstOrDefault(team => team.Id.Equals(teamId));
+            if (dbTeam != null)
+            {
+                _dbSet.Remove(dbTeam);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

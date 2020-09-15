@@ -10,8 +10,8 @@ using WorkSharp.DAL;
 namespace WorkSharp.DAL.Migrations
 {
     [DbContext(typeof(WorkSharpDbContext))]
-    [Migration("20200907200801_Fix")]
-    partial class Fix
+    [Migration("20200915134651_T.T")]
+    partial class TT
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -220,6 +220,9 @@ namespace WorkSharp.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("CreatorId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Info")
                         .HasColumnType("nvarchar(max)");
 
@@ -228,6 +231,9 @@ namespace WorkSharp.DAL.Migrations
 
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

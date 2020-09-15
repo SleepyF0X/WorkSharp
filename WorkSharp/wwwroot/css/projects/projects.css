@@ -16,3 +16,9 @@ table .info {
 table .remove {
     width: 10%;
 }
+.table td {
+    vertical-align: middle;
+}
+.table th {
+    vertical-align: middle;
+}

@@ -28,7 +28,7 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
 
         public IReadOnlyCollection<DbProject> GetUserProjects(Guid userId)
         {
-            var projects = _context.Users.AsNoTracking().SelectMany(user => user.TeamMembers.Select(tm => tm.Team.Project)).ToList().AsReadOnly();
+            var projects = _context.Users.Where(user => user.Id.Equals(userId)).AsNoTracking().SelectMany(user => user.TeamMembers.Select(tm => tm.Team.Project)).ToList().AsReadOnly();
             return projects;
         }
 
@@ -36,9 +36,16 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
         {
             var userProjects = GetUserProjects(userId);
             var project = userProjects.FirstOrDefault(project => project.Id.Equals(id));
-            project.TaskBoards = _context.TaskBoards.Where(tb => tb.ProjectId.Equals(project.Id)).ToList();
-            project.Teams = _context.Teams.Where(t=>t.ProjectId.Equals(project.Id)).ToList();
-            return project;
+            if (project != null)
+            {
+                project.TaskBoards = _context.TaskBoards.Where(tb => tb.ProjectId.Equals(project.Id)).ToList();
+                project.Teams = _context.Teams.Where(t => t.ProjectId.Equals(project.Id)).ToList();
+                return project;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public bool DeleteSecure(Guid id, Guid userId)
@@ -61,8 +68,10 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
             _dbSet.Attach(dbProject);
             var team = new DbTeam
             {
-                Name = "Name",
+                Name = "Admins",
+                Status = "Admin",
                 ProjectId = dbProject.Id,
+                CreatorId = memberId,
                 TeamMembers = new List<DbTeamMembers>(),
                 Info = "null"
             };

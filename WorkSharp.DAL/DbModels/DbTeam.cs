@@ -10,8 +10,10 @@ namespace WorkSharp.DAL.DbModels
         public Guid Id { get; set; }
         public Guid ProjectId { get; set; }
         public DbProject Project { get; set; }
+        public Guid CreatorId { get; set; }
         public string Name { get; set; }
         public string Info { get; set; }
+        public string Status { get; set; }
         public List<DbTeamMembers> TeamMembers { get; set; }
     }
 }
