@@ -12,5 +12,7 @@ namespace WorkSharp.DAL.DbModels
         public string Name { get; set; }
         public string Info { get; set; }
         public DateTimeOffset Deadline { get; set; }
+        public Guid? ExecutorId { get; set; }
+        public DbUser Executor { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using WorkSharp.DAL.DbModels.Relations;
 
 namespace WorkSharp.DAL.DbModels
 {
@@ -14,6 +14,7 @@ namespace WorkSharp.DAL.DbModels
         public string Name { get; set; }
         public string Info { get; set; }
         public string Status { get; set; }
-        public List<DbTeamMembers> TeamMembers { get; set; }
+        public List<DbUser> Members { get; set; } = new List<DbUser>();
+        public List<DbTaskBoard> TaskBoards { get; set; } = new List<DbTaskBoard>();
     }
 }

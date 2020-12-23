@@ -21,6 +21,10 @@ namespace WorkSharp.Mappers
                     dest => dest.TeamViewModels,
                     opt => opt.MapFrom(
                         source => source.Teams))
+                .ForMember(
+                    dest=>dest.Creator, 
+                    opt => opt.MapFrom(
+                        source=>source.Creator))
                 .ReverseMap();
             CreateMap<DbUser, RegisterViewModel>()
                 .ReverseMap();
@@ -36,13 +40,13 @@ namespace WorkSharp.Mappers
                 .ForMember(
                     dest => dest.Members,
                     opt => opt.MapFrom(
-                        source => source.TeamMembers.Select(tm => tm.Member)))
+                        source => source.Members))
                 .ReverseMap();
             CreateMap<DbUser, UserViewModel>()
                 .ForMember(
                     dest => dest.Teams, 
                     opt => opt.MapFrom(
-                        source => source.TeamMembers.Select(tm => tm.Team)))
+                        source => source.Teams))
                 .ReverseMap();
         }
     }

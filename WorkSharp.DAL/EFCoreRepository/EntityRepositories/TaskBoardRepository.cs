@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using WorkSharp.DAL.DbModels;
@@ -9,12 +10,14 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
 {
     public class TaskBoardRepository : ITaskBoardRepository
     {
+        private IProjectRepository _projectRepository;
         private WorkSharpDbContext _context;
         private DbSet<DbTaskBoard> _dbSet;
-        public TaskBoardRepository(WorkSharpDbContext context)
+        public TaskBoardRepository(WorkSharpDbContext context, IProjectRepository projectRepository)
         {
             _context = context;
             _dbSet = _context.TaskBoards;
+            _projectRepository = projectRepository;
         }
         public IReadOnlyCollection<DbTaskBoard> GetAll()
         {
@@ -23,12 +26,28 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
 
         public IReadOnlyCollection<DbTaskBoard> GetUserTaskBoards(Guid userId)
         {
-            throw new NotImplementedException();
+            return _dbSet
+                .Include(tb => tb.Team)
+                .ThenInclude(t => t.Members)
+                .Where(tb => tb.Team.Members.Select(m => m.Id).Contains(userId)).ToList().AsReadOnly();
         }
 
-        public DbTaskBoard GetByIdSecure(Guid id, Guid userId)
+        public DbTaskBoard GetByIdSecure(Guid taskBoardId, Guid userId)
         {
-            return _dbSet.Find(id);
+            var dbTaskBoard = _context.TaskBoards
+                .Include(tb => tb.Tasks)
+                .Include(tb=>tb.Project)
+                .Include(tb=>tb.Team)
+                .ThenInclude(t=>t.Members)
+                .FirstOrDefault(t => t.Id.Equals(taskBoardId));
+            var projectId = dbTaskBoard.ProjectId;
+            if (_projectRepository.IsAdmin(projectId, userId))
+            {
+                return dbTaskBoard;
+            }
+            var userTeams = GetUserTaskBoards(userId);
+            dbTaskBoard = userTeams.FirstOrDefault(team => team.Id.Equals(taskBoardId));
+            return dbTaskBoard;
         }
 
         public bool DeleteSecure(Guid id, Guid userId)

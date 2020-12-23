@@ -1,39 +1,219 @@
-﻿@model WorkSharp.ViewModels.User.TeamViewModel
+﻿@using WorkSharp.DAL.DbModels
+@model WorkSharp.ViewModels.User.Multiply.TeamTaskBoardViewModel
 @{
     var i = 1;
+    var team = ViewData["Team"] as TeamViewModel;
+    var users = ViewData["Users"] as SelectList;
+    var adminAreas = ViewBag.AdminAreas;
 }
 <link rel="stylesheet" href="~/css/projects/project.css" />
-<div class="container d-flex justify-content-center project-info">
-    <div>
-        <h1>Name: @Model.Name</h1><br />
-        <h2>Info: @Model.Status</h2><br />
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<div class="m-5 d-flex flex-column justify-content-center project-info">
+    <div class="d-flex flex-column">
+        <h1>Name: @team.Name</h1><br />
+        <h2>Info: @team.Status</h2><br />
         @*<a asp-controller="Projects" asp-action="GetEditProject" asp-route-projectId="@Model.Id" class="btn btn-info btn-lg">
                 <span class="glyphicon glyphicon-remove"></span> Edit
             </a>*@
     </div>
-    <table class="table project-table">
-            <thead>
-                <tr>
-                    <th scope="col" class="number">#</th>
-                    <th scope="col" class="name">Name</th>
-                    <th scope="col" class="info">Info</th>
-                    <th scope="col" class="remove">Remove</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var member in Model.Members)
+    <div class="d-flex mt-5">
+        <div class="d-flex flex-column align-items-center w-75">
+            <div class="d-flex align-items-center">
+                <h1>Members</h1>
+                @if (adminAreas)
                 {
-                    <tr>
-                        <th scope="row">@i</th>
-                        <td><a asp-controller="TaskBoards" asp-action="TaskBoard" asp-route-projectId="@member.Id">@member.UserName</a></td>
-                        <td>
-                            <a asp-controller="TaskBoards" asp-action="RemoveTaskBoard" asp-route-projectId="@member.Id" class="btn btn-info btn-lg">
-                                <span class="glyphicon glyphicon-remove"></span> Remove
-                            </a>
-                        </td>
-                    </tr>
-                    i++;
+                    <div class="wrap">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-member-modal-new">
+                            Add Member
+                        </button>
+                    </div>
                 }
-            </tbody>
-        </table>
+            </div>
+            <table class="table project-table w-75">
+                <thead>
+                    <tr>
+                        <th scope="col" class="number">#</th>
+                        <th scope="col" class="name">Name</th>
+                        <th scope="col" class="info">Teams</th>
+                    @if (adminAreas)
+                    {
+                        <th scope="col" class="remove">Remove</th>
+                    }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var member in team.Members)
+                    {
+                        <tr>
+                            <th scope="row">@i</th>
+                            <td><a asp-controller="Profile" asp-action="Profile" asp-route-projectId="@member.Id">@member.UserName</a></td>
+                            <td>
+                                @foreach (var memberTeam in member.Teams)
+                                {
+                                    <a asp-controller="Teams" asp-action="Team" asp-route-teamId="@memberTeam.Id" asp-route-projId="@memberTeam.ProjectId" class="btn btn-info btn-sm">@memberTeam.Name</a>
+                                }
+                            </td>
+                            @if (adminAreas)
+                            {
+                                <td>
+                                    <a asp-controller="Teams" asp-action="RemoveMember" asp-route-teamId="@team.Id" asp-route-projId="@team.ProjectId" asp-route-userId="@member.Id" class="btn btn-danger btn-sm">
+                                        <span class="glyphicon glyphicon-remove"></span> Remove
+                                    </a>
+                                </td>
+                            }
+                        </tr>
+                        i++;
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex flex-column align-items-center w-75">
+            <div class="d-flex align-items-center">
+                <h1>Task Boards</h1>
+                @if (adminAreas)
+                {
+                    <div class="wrap">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-taskBoard-modal-new">
+                            Add TaskBoard
+                        </button>
+                    </div>
+                }
+            </div>
+            <table class="table project-table w-75">
+                <thead>
+                    <tr>
+                        <th scope="col" class="number">#</th>
+                        <th scope="col" class="name">Name</th>
+                        <th scope="col" class="info">Type</th>
+                        <th scope="col" class="info">Info</th>
+                    @if (adminAreas)
+                    {
+                        <th scope="col" class="remove">Remove</th>
+                    }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var taskBoard in team.TaskBoards)
+                    {
+                        <tr>
+                            <th scope="row">@i</th>
+                            <td><span>@taskBoard.Name</span></td>
+                            <td>
+                                <span>@taskBoard.Type</span>
+                            </td>
+                            <td>
+                                <span>
+                                    <a asp-controller="TaskBoards" asp-action="TaskBoard" asp-route-taskBoardId="@taskBoard.Id" class="btn btn-info btn-sm">
+                                        <span class="glyphicon glyphicon-remove"></span> Info
+                                    </a>
+                                </span>
+                            </td>
+                            @if (adminAreas)
+                            {
+                                <td>
+                                    <a asp-controller="TaskBoards" asp-action="RemoveTaskBoard" asp-route-taskBoardId="@taskBoard.Id" asp-route-page="team" class="btn btn-danger btn-sm">
+                                        <span class="glyphicon glyphicon-remove"></span> Remove
+                                    </a>
+                                </td>
+                            }
+                        </tr>
+                        i++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
+<div class="modal fade bs-member-modal-new" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog">
+
+        <!-- Modal Content: begins -->
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+
+            <!-- Modal Body -->
+            <form asp-controller="Teams" asp-action="AddMember" asp-route-teamId="@team.Id" asp-route-projId="@team.ProjectId">
+                <div class="modal-body">
+                    <div class="body-message">
+                        <h4>Any Heading</h4>
+                        <label>User:</label>
+                        <select class="form-control" asp-for="TeamViewModel.MemberId" asp-items="users">
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+
+        </div>
+        <!-- Modal Content: ends -->
+
+    </div>
+</div>
+<div class="modal fade bs-taskBoard-modal-new" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog">
+
+        <!-- Modal Content: begins -->
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+
+            <!-- Modal Body -->
+            <form asp-controller="TaskBoards" asp-action="CreateTaskBoard" asp-route-page="team">
+                <div class="modal-body">
+                    <div class="body-message">
+                        <h4>Any Heading</h4>
+                        <input class="form-control" type="text" asp-for="TaskBoardViewModel.ProjectId" style="display: none" value="@team.ProjectId" /><br />
+                        <input class="form-control" type="text" asp-for="TaskBoardViewModel.TeamId" style="display: none" value="@team.Id" /><br />
+                        <label>Task Board name:</label>
+                        <input class="form-control" type="text" asp-for="TaskBoardViewModel.Name" /><br />
+                        <label>Task Board type:</label>
+                        <input class="form-control" type="text" asp-for="TaskBoardViewModel.Type" /><br />
+                    </div>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+
+        </div>
+        <!-- Modal Content: ends -->
+
+    </div>
+</div>
+<div id="error-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-modal="true" style="display: none;">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center">
+                <h4 class="modal-title text-center" id="myModalLabel">Error</h4>
+            </div>
+            <div class="modal-body d-flex justify-content-center">
+                <h3>@ViewBag.ErrorMessage</h3>
+            </div>
+
+        </div>
+    </div>
+</div>
+@if (ViewBag.ErrorMessage != null)
+{
+    <script>$('#error-modal').modal('show');</script>
+}

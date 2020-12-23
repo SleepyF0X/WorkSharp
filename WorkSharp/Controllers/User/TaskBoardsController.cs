@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using WorkSharp.DAL.DbModels;
 using WorkSharp.DAL.EFCoreRepository.IEntityRepositories;
 using WorkSharp.ViewModels.User;
+using WorkSharp.ViewModels.User.Multiply;
 
 namespace WorkSharp.Controllers.User
 {
@@ -27,25 +28,58 @@ namespace WorkSharp.Controllers.User
             var userId = GetUserId();
             var dbTaskBoard = _repository.GetByIdSecure(taskBoardId, userId);
             var taskBoardViewModel = _mapper.Map<TaskBoardViewModel>(dbTaskBoard);
-            return View("~/Views/User/TaskBoards/TaskBoard.cshtml", taskBoardViewModel);
+            ViewData["TaskBoard"] = taskBoardViewModel;
+            return View("~/Views/User/TaskBoards/TaskBoard.cshtml");
         }
 
-        public IActionResult RemoveTaskBoard(Guid taskBoardId)
+        public IActionResult RemoveTaskBoard(Guid taskBoardId, string page)
         {
-            var userId = GetUserId();
-            var taskBoardProjectId = _repository.GetByIdSecure(taskBoardId, userId).ProjectId;
-            _repository.DeleteSecure(taskBoardId, userId);
-            _repository.Save();
-            return RedirectToAction("Project", "Projects", new { projectId = taskBoardProjectId });
+            if (page == "project")
+            {
+                var userId = GetUserId();
+                var taskBoardProjectId = _repository.GetByIdSecure(taskBoardId, userId).ProjectId;
+                _repository.DeleteSecure(taskBoardId, userId);
+                _repository.Save();
+                return RedirectToAction("Project", "Projects", new {projectId = taskBoardProjectId});
+            }
+            else
+            {
+                var userId = GetUserId();
+                var taskBoard = _repository.GetByIdSecure(taskBoardId, userId);
+                _repository.DeleteSecure(taskBoardId, userId);
+                _repository.Save();
+                return RedirectToAction("Team", "Teams", new {taskBoard.TeamId, taskBoard.ProjectId});
+            }
         }
 
-        public IActionResult CreateTaskBoard(TaskBoardViewModel taskBoardViewModel)
+        public IActionResult CreateTaskBoard(TeamTaskBoardViewModel teamTaskBoardViewModel, string page)
         {
-            var dbTaskBoard = _mapper.Map<DbTaskBoard>(taskBoardViewModel);
-            _repository.Create(dbTaskBoard);
-            _repository.Save();
-            return RedirectToAction("Project", "Projects", new{projectId = taskBoardViewModel.ProjectId});
+            if (page == "project")
+            {
+                var taskBoardViewModel = teamTaskBoardViewModel.TaskBoardViewModel;
+                var dbTaskBoard = _mapper.Map<DbTaskBoard>(taskBoardViewModel);
+                _repository.Create(dbTaskBoard);
+                _repository.Save();
+                return RedirectToAction("Project", "Projects", new{projectId = taskBoardViewModel.ProjectId});
+            }
+
+            else
+            {
+                var taskBoardViewModel = teamTaskBoardViewModel.TaskBoardViewModel;
+                var dbTaskBoard = _mapper.Map<DbTaskBoard>(taskBoardViewModel);
+                _repository.Create(dbTaskBoard);
+                _repository.Save();
+                return RedirectToAction("Team", "Teams", new{taskBoardViewModel.TeamId, taskBoardViewModel.ProjectId});
+            }
+            
         }
+        //public IActionResult CreateTaskBoard(TaskBoardViewModel taskBoardViewModel)
+        //{
+        //    var dbTaskBoard = _mapper.Map<DbTaskBoard>(taskBoardViewModel);
+        //    _repository.Create(dbTaskBoard);
+        //    _repository.Save();
+        //    return RedirectToAction("Team", "Teams", new{taskBoardViewModel.TeamId, taskBoardViewModel.ProjectId});
+        //}
         private Guid GetUserId()
         {
             return _userManager.GetUserAsync(HttpContext.User).Result.Id;

@@ -44,15 +44,24 @@ namespace WorkSharp.Controllers
         {
             if (!ModelState.IsValid) return View("Register", model);
             var user = _mapper.Map<DbUser>(model);
+            user.Id = Guid.NewGuid();
             var claims = new List<Claim>
             {
+                new Claim("Id", user.Id.ToString()),
                 new Claim("Name", model.UserName),
                 new Claim("Email", model.Email)
             };
-            await _userManager.CreateAsync(user, model.Password);
-            await _userManager.AddClaimsAsync(user, claims);
-
-            return RedirectToAction("Login");
+            var regResult = await _userManager.CreateAsync(user, model.Password);
+            if (regResult.Succeeded == true)
+            {
+                await _userManager.AddClaimsAsync(user, claims);
+                return RedirectToAction("Login");
+            }
+            else
+            {
+                ViewBag.ErrorMessage = regResult.Errors.Select(e=>e.Description).Aggregate((a, b) => a + ", " + b);
+                return View(model);
+            }
         }
 
         [HttpPost]

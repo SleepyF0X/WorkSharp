@@ -31,4 +31,6 @@ modal-title {
 .tables {
     width: 44%;
 }
-
+table td, th {
+    text-align: center;
+}

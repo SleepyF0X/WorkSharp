@@ -13,5 +13,6 @@ namespace WorkSharp.ViewModels.User
         public string Info { get; set; }
         public DateTimeOffset Deadline { get; set; }
         public Guid ExecutorId { get; set; }
+        public UserViewModel Executor { get; set; }
     }
 }
