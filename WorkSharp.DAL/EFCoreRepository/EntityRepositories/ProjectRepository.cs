@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using WorkSharp.DAL.DbModels;
-using WorkSharp.DAL.DbModels.Relations;
 using WorkSharp.DAL.EFCoreRepository.IEntityRepositories;
 
 namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
@@ -13,12 +12,10 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
     {
         private WorkSharpDbContext _context;
         private DbSet<DbProject> _dbSet;
-        private ITeamRepository _teamRepository;
-        public ProjectRepository(WorkSharpDbContext context, ITeamRepository teamRepository)
+        public ProjectRepository(WorkSharpDbContext context)
         {
             _context = context;
             _dbSet = _context.Projects;
-            _teamRepository = teamRepository;
         }
 
         public IReadOnlyCollection<DbProject> GetAll()
@@ -28,7 +25,14 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
 
         public IReadOnlyCollection<DbProject> GetUserProjects(Guid userId)
         {
-            var projects = _context.Users.Where(user => user.Id.Equals(userId)).AsNoTracking().SelectMany(user => user.TeamMembers.Select(tm => tm.Team.Project)).ToList().AsReadOnly();
+            var projects = _context.Projects
+                .AsNoTracking()
+                .Include(p => p.Admins)
+                .Include(p=>p.Creator)
+                .Include(p => p.Teams)
+                .ThenInclude(t=>t.Members)
+                .Where(p => p.Admins.Select(a => a.Id).Contains(userId) ||
+                            p.Teams.SelectMany(t => t.Members).Any(m=>m.Id.Equals(userId))).ToList().AsReadOnly();
             return projects;
         }
 
@@ -38,8 +42,11 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
             var project = userProjects.FirstOrDefault(project => project.Id.Equals(id));
             if (project != null)
             {
-                project.TaskBoards = _context.TaskBoards.Where(tb => tb.ProjectId.Equals(project.Id)).ToList();
-                project.Teams = _context.Teams.Where(t => t.ProjectId.Equals(project.Id)).ToList();
+                project.TaskBoards = _context.TaskBoards
+                    .Include(tb=>tb.Team)
+                    .ThenInclude(t=>t.Members)
+                    .Where(tb => tb.ProjectId.Equals(project.Id))
+                    .ToList();
                 return project;
             }
             else
@@ -48,12 +55,12 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
             }
         }
 
-        public bool DeleteSecure(Guid id, Guid userId)
+        public bool DeleteSecure(Guid projectId, Guid userId)
         {
-            var userProjects = GetUserProjects(userId);
-            var project = userProjects.FirstOrDefault(project => project.Id.Equals(id));
-            if (project != null)
+            var isAdmin = IsAdmin(projectId, userId);
+            if (isAdmin)
             {
+                var project = _context.Projects.Find(projectId);
                 _context.Remove(project);
                 return true;
             }
@@ -63,31 +70,18 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
             }
         }
 
-        public void Create(DbProject dbProject, Guid memberId)
+        public void Create(DbProject dbProject, Guid creatorId)
         {
-            _dbSet.Attach(dbProject);
-            var team = new DbTeam
-            {
-                Name = "Admins",
-                Status = "Admin",
-                ProjectId = dbProject.Id,
-                CreatorId = memberId,
-                TeamMembers = new List<DbTeamMembers>(),
-                Info = "null"
-            };
-            team.TeamMembers.Add(new DbTeamMembers
-            {
-                TeamId = team.Id,
-                MemberId = memberId
-            });
-            _context.Teams.Attach(team);
-            _context.SaveChanges();
+            dbProject.Admins.Add(_context.Users.Find(creatorId));
+            dbProject.CreatorId = creatorId;
+            _dbSet.Add(dbProject);
         }
 
         public bool UpdateSecure(DbProject dbProject, Guid userId)
         {
-            var userProjects = GetUserProjects(userId);
-            if (userProjects.Any(project => project.Id.Equals(dbProject.Id)))
+            dbProject.CreatorId = userId;
+            var isAdmin = IsAdmin(dbProject.Id, userId);
+            if (isAdmin)
             {
                 _dbSet.Update(dbProject);
                 return true;
@@ -98,6 +92,16 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
             }
         }
 
+        public bool IsAdmin(Guid projectId, Guid userId)
+        {
+            if (_context.Projects.AsNoTracking().Include(p => p.Admins).Include(p=>p.Creator).FirstOrDefault(p => p.Id.Equals(projectId)).Admins
+                .Any(a => a.Id.Equals(userId)))
+            {
+                return true;
+            }
+
+            return false;
+        }
         public void Save()
         {
             _context.SaveChanges();

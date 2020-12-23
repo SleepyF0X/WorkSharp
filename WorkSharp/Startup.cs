@@ -30,9 +30,11 @@ namespace WorkSharp
             services.AddDbContext<WorkSharpDbContext>(options => options.UseSqlServer(connectionString));
             services.AddAutoMapper(typeof(MapperProfile));
             services.AddMvc();
-            services.AddTransient<IProjectRepository, ProjectRepository>();
-            services.AddTransient<ITaskBoardRepository, TaskBoardRepository>();
-            services.AddTransient<ITeamRepository, TeamRepository>();
+            services.AddScoped<IProjectRepository, ProjectRepository>();
+            services.AddScoped<ITaskBoardRepository, TaskBoardRepository>();
+            services.AddScoped<ITaskRepository, TaskRepository>();
+            services.AddScoped<ITeamRepository, TeamRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
             services.AddIdentity<DbUser, DbRole>().AddEntityFrameworkStores<WorkSharpDbContext>();
             services.Configure<IdentityOptions>(options =>
             {

@@ -3,7 +3,7 @@
     var i = 1;
     var projects = ViewData["Projects"] as IEnumerable<ProjectViewModel>;
 }
-    <link rel="stylesheet" href="~/css/projects/projects.css" />
+<link rel="stylesheet" href="~/css/projects/projects.css" />
 <div class="col-12 d-flex justify-content-center project-form">
     <div class="col-3 text-center">
         <form asp-controller="Projects" asp-action="CreateProject">
@@ -19,28 +19,34 @@
     <div class="container">
         <table class="table project-table">
             <thead>
-            <tr>
-                <th scope="col" class="number">#</th>
-                <th scope="col" class="name">Name</th>
-                <th scope="col" class="info">Info</th>
-                <th scope="col" class="remove">Remove</th>
-            </tr>
+                <tr>
+                    <th scope="col" class="number">#</th>
+                    <th scope="col" class="name">Name</th>
+                    <th scope="col" class="info">Info</th>
+                    @*@if (project.Creator.UserName.Equals(User.Claims.Where(c => c.Type == "Name").Select(c => c.Value).SingleOrDefault()))
+                    {
+                        <th scope="col" class="info">Info</th>
+                    }*@
+                </tr>
             </thead>
             <tbody>
-            @foreach (var project in projects)
-            {
-                <tr>
-                    <th scope="row">@i</th>
-                    <td><a asp-controller="Projects" asp-action="Project" asp-route-projectId="@project.Id">@project.Name</a></td>
-                    <td>@project.Info</td>
-                    <td>
-                        <a asp-controller="Projects" asp-action="RemoveProject" asp-route-projectId="@project.Id" class="btn btn-info btn-lg">
-                            <span class="glyphicon glyphicon-remove"></span> Remove
-                        </a>
-                    </td>
-                </tr>
-                i++;
-            }
+                @foreach (var project in projects)
+                {
+                    <tr>
+                        <th scope="row">@i</th>
+                        <td><a asp-controller="Projects" asp-action="Project" asp-route-projectId="@project.Id">@project.Name</a></td>
+                        <td>@project.Info</td>
+                        @*@if (project.Creator.UserName.Equals(User.Claims.Where(c => c.Type == "Name").Select(c => c.Value).SingleOrDefault()))
+                        {
+                            <td>
+                                <a asp-controller="Projects" asp-action="RemoveProject" asp-route-projectId="@project.Id" class="btn btn-info btn-lg">
+                                    <span class="glyphicon glyphicon-remove"></span> Remove
+                                </a>
+                            </td>
+                        }*@
+                    </tr>
+                    i++;
+                }
             </tbody>
         </table>
     </div>

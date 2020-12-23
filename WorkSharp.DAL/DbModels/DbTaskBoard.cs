@@ -10,6 +10,8 @@ namespace WorkSharp.DAL.DbModels
         public string Name { get; set; }
         public Guid ProjectId { get; set; }
         public DbProject Project { get; set; }
+        public Guid TeamId { get; set; }
+        public DbTeam Team { get; set; }
         public string Type { get; set; }
         public IReadOnlyCollection<DbTask> Tasks { get; set; }
     }

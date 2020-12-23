@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WorkSharp.DAL.DbModels;
-using WorkSharp.DAL.DbModels.Relations;
 
 namespace WorkSharp.ViewModels.User
 {
@@ -14,5 +13,8 @@ namespace WorkSharp.ViewModels.User
         public string Name { get; set; }
         public string Status { get; set; }
         public IReadOnlyCollection<UserViewModel> Members { get; set; }
+        public IReadOnlyCollection<TaskBoardViewModel> TaskBoards { get; set; }
+        public Guid MemberId { get; set; }
+        public bool Admin { get; set; }
     }
 }

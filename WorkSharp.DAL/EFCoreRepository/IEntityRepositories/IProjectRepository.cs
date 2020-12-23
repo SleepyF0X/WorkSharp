@@ -14,6 +14,7 @@ namespace WorkSharp.DAL.EFCoreRepository.IEntityRepositories
         public bool DeleteSecure(Guid id, Guid userId);
         public void Create(DbProject dbProject, Guid memberId);
         public bool UpdateSecure(DbProject dbProject, Guid userId);
+        public bool IsAdmin(Guid projectId, Guid userId);
         public void Save();
     }
 }

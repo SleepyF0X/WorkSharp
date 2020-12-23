@@ -1,0 +1,122 @@
+﻿@model WorkSharp.ViewModels.User.UserViewModel
+@{
+    var profile = ViewData["Profile"] as UserViewModel;
+}
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<div class="container">
+    <div class="row mt-5">
+        <form class="d-flex">
+            <div class="col-md-4">
+                <div class="card">
+                    <img class="card-img-top" src="https://cdn3.iconfinder.com/data/icons/black-easy/512/538303-user_512x512.png" alt="Card image cap">
+                    <div class="card-body text-center" id="Username">
+                        @profile.UserName
+                    </div>
+                    <input type="text" class="form-control" id="inputUsername" value="@profile.UserName" aria-describedby="emailHelp" placeholder="Username" style="display: none" asp-for="UserName">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <input type="text" class="form-control" id="inputId" value="@profile.Id" aria-describedby="emailHelp" placeholder="Age" style="display: none" asp-for="Id">
+                        <input type="text" class="form-control" id="inputId" value="@profile.SecurityStamp" aria-describedby="emailHelp" placeholder="Age" style="display: none" asp-for="SecurityStamp">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Firstname:</label>
+                            <p id="Name">@profile.Name</p>
+                            <input type="text" class="form-control" id="inputName" value="@profile.Name" aria-describedby="emailHelp" placeholder="Name" style="display: none" asp-for="Name">
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Lastname:</label>
+                            <p id="Surname">@profile.Surname</p>
+                            <input type="text" class="form-control" id="inputSurname" value="@profile.Surname" aria-describedby="emailHelp" placeholder="Surname" style="display: none" asp-for="Surname">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Age:</label>
+                            <p id="Age">@profile.Age</p>
+                            <input type="text" class="form-control" id="inputAge" value="@profile.Age" aria-describedby="emailHelp" placeholder="Age" style="display: none" asp-for="Age">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Skills:</label>
+                            <p id="Skills">@profile.Skills</p>
+                            <input type="text" class="form-control" id="inputSkills" value="@profile.Skills" aria-describedby="emailHelp" placeholder=".NET, JS, HTML, CSS" style="display: none" asp-for="Skills">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Email:</label>
+                            <p id="Email">@profile.Email</p>
+                            <input type="email" class="form-control" id="inputEmail" value="@profile.Email" aria-describedby="emailHelp" placeholder="example@gmail.com" style="display: none" asp-for="Email">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-5">
+                <div class="col-md-12 d-flex">
+                    <button type ="button" id="editButton" class="btn btn-primary mr-4" onclick="editProfile()">Edit</button>
+                    <button type ="button" id="cancelButton" class="btn btn-danger mr-4" style="display: none;" onclick="cancelEdit()">Cancel</button>
+                    <button id="saveButton" class="btn btn-success" style="display: none;" asp-controller="Profile" asp-action="EditProfile">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="error-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-modal="true" style="display: none;">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center">
+                <h4 class="modal-title text-center" id="myModalLabel">Error</h4>
+            </div>
+            <div class="modal-body d-flex justify-content-center">
+                <span>@ViewBag.ErrorMessage</span>
+            </div>
+
+        </div>
+    </div>
+</div>
+@if (ViewBag.ErrorMessage != null)
+{
+    <script>$('#error-modal').modal('show');</script>
+
+}
+<script>
+    function editProfile() {
+        $('#cancelButton').show()
+        $('#saveButton').show()
+        $('#editButton').hide()
+
+        $('#inputName').show()
+        $('#inputSurname').show()
+        $('#inputAge').show()
+        $('#inputSkills').show()
+        $('#inputEmail').show()
+        $('#inputUsername').show()
+
+        $('#Name').hide()
+        $('#Surname').hide()
+        $('#Age').hide()
+        $('#Skills').hide()
+        $('#Email').hide()
+        $('#Username').hide()
+    }
+    function cancelEdit() {
+        $('#cancelButton').hide()
+        $('#saveButton').hide()
+        $('#editButton').show()
+
+        $('#inputName').hide()
+        $('#inputSurname').hide()
+        $('#inputAge').hide()
+        $('#inputSkills').hide()
+        $('#inputEmail').hide()
+        $('#inputUsername').hide()
+
+        $('#Name').show()
+        $('#Surname').show()
+        $('#Age').show()
+        $('#Skills').show()
+        $('#Email').show()
+        $('#Username').show()
+    }
+</script>

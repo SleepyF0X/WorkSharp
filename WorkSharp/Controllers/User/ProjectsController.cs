@@ -5,8 +5,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using WorkSharp.DAL.DbModels;
-using WorkSharp.DAL.DbModels.Relations;
 using WorkSharp.DAL.EFCoreRepository;
 using WorkSharp.DAL.EFCoreRepository.IEntityRepositories;
 using WorkSharp.ViewModels;
@@ -60,12 +60,19 @@ namespace WorkSharp.Controllers.User
 
         public IActionResult Project(Guid projectId)
         {
+            if (TempData["ErrorMessage"] != null)
+            {
+                ViewBag.ErrorMessage = TempData["ErrorMessage"].ToString();
+            }
+
+            ViewBag.AdminAreas = _projectRepository.IsAdmin(projectId, GetUserId());
             var userId = GetUserId();
             var dbProject = _projectRepository.GetByIdSecure(projectId, userId);
             if (dbProject != null)
             {
                 var projectViewModel = _mapper.Map<ProjectViewModel>(dbProject);
                 ViewData["Project"] = projectViewModel;
+                ViewData["Teams"] = new SelectList(projectViewModel.TeamViewModels, "Id", "Name");;
                 return View("~/Views/User/Projects/Project.cshtml");
             }
             else
@@ -106,8 +113,8 @@ namespace WorkSharp.Controllers.User
         }
 
         private Guid GetUserId()
-        { 
-            return _userManager.GetUserAsync(HttpContext.User).Result.Id;
+        {
+            return Guid.Parse((ReadOnlySpan<char>) HttpContext.User.Claims.SingleOrDefault(c=>c.Type.Equals("Id"))?.Value);
         }
     }
 }
