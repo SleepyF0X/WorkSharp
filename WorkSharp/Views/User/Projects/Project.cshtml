@@ -37,7 +37,6 @@
                                     @admin.UserName
                                 </a>
                             }
-
                         </span>
                     }
                 </div>
@@ -93,48 +92,58 @@
                         </button>
                     </div>
                 }
-                <table class="table project-table">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="number">#</th>
-                            <th scope="col" class="name">Name</th>
-                            <th scope="col" class="name">Type</th>
-                            <th scope="col" class="name">Info</th>
-                            @if (adminAreas)
-                            {
-                                <th scope="col" class="remove">Remove</th>
-                            }
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var taskBoard in project.TaskBoardViewModels)
-                        {
+                @if (project.TaskBoardViewModels.Any())
+                {
+                    <table class="table project-table">
+                        <thead>
                             <tr>
-                                <th scope="row">@i</th>
-                                <td><span>@taskBoard.Name</span></td>
-                                <td><span>@taskBoard.Type</span></td>
-
-                                @if (taskBoard.Team.Members.Select(t => t.UserName).Contains(User.Claims.Where(c => c.Type == "Name").Select(c => c.Value).SingleOrDefault()) || adminAreas)
-                                {
-                                    <td><a asp-controller="TaskBoards" asp-action="TaskBoard" asp-route-taskBoardId="@taskBoard.Id" class="btn btn-info btn-sm">Info</a></td>
-                                }
-                                else
-                                {
-                                    <td><span class="btn btn-secondary disabled btn-sm">Info</span></td>
-                                }
+                                <th scope="col" class="number">#</th>
+                                <th scope="col" class="name">Name</th>
+                                <th scope="col" class="name">Type</th>
+                                <th scope="col" class="name">Team</th>
+                                <th scope="col" class="name">Info</th>
                                 @if (adminAreas)
                                 {
-                                    <td>
-                                        <a asp-controller="TaskBoards" asp-action="RemoveTaskBoard" asp-route-taskBoardId="@taskBoard.Id" asp-route-page="project" class="btn btn-danger btn-sm">
-                                            <span class="glyphicon glyphicon-remove"></span> Remove
-                                        </a>
-                                    </td>
+                                    <th scope="col" class="remove">Remove</th>
                                 }
                             </tr>
-                            i++;
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var taskBoard in project.TaskBoardViewModels)
+                            {
+                                <tr>
+                                    <th scope="row">@i</th>
+                                    <td><span>@taskBoard.Name</span></td>
+                                    <td><span>@taskBoard.Type</span></td>
+                                    <td>
+                                        <span>
+                                            <a asp-controller="Teams" asp-action="Team" asp-route-projId="@taskBoard.ProjectId" asp-route-teamId="@taskBoard.TeamId" class="btn btn-sm btn-outline-success">
+                                                @taskBoard.Team.Name
+                                            </a>
+                                        </span>
+                                    </td>
+                                    @if (taskBoard.Team.Members.Select(t => t.UserName).Contains(User.Claims.Where(c => c.Type == "Name").Select(c => c.Value).SingleOrDefault()) || adminAreas)
+                                    {
+                                        <td><a asp-controller="TaskBoards" asp-action="TaskBoard" asp-route-taskBoardId="@taskBoard.Id" class="btn btn-info btn-sm">Info</a></td>
+                                    }
+                                    else
+                                    {
+                                        <td><span class="btn btn-secondary disabled btn-sm">Info</span></td>
+                                    }
+                                    @if (adminAreas)
+                                    {
+                                        <td>
+                                            <a asp-controller="TaskBoards" asp-action="RemoveTaskBoard" asp-route-taskBoardId="@taskBoard.Id" asp-route-page="project" class="btn btn-danger btn-sm">
+                                                <span class="glyphicon glyphicon-remove"></span> Remove
+                                            </a>
+                                        </td>
+                                    }
+                                </tr>
+                                i++;
+                            }
+                        </tbody>
+                    </table>
+                }
             </div>
         </div>
         <div class="d-flex flex-column align-items-center tables p-2">
@@ -147,47 +156,50 @@
                         </button>
                     </div>
                 }
-                <table class="table project-table">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="number">#</th>
-                            <th scope="col" class="name">Name</th>
-                            <th scope="col" class="name">Team Status</th>
-                            <th scope="col" class="name">Info</th>
-                            @if (adminAreas)
+                @if (project.TeamViewModels.Any())
+                {
+                    <table class="table project-table">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="number">#</th>
+                                <th scope="col" class="name">Name</th>
+                                <th scope="col" class="name">Team Status</th>
+                                <th scope="col" class="name">Info</th>
+                                @if (adminAreas)
+                                {
+                                    <th scope="col" class="remove">Remove</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var team in project.TeamViewModels)
                             {
-                                <th scope="col" class="remove">Remove</th>
+                            <tr>
+                                <th scope="row">@j</th>
+                                <td><span>@team.Name</span></td>
+                                <td><span>@team.Status</span></td>
+                                @if (team.Members.Select(t => t.UserName).Contains(User.Claims.Where(c => c.Type == "Name").Select(c => c.Value).SingleOrDefault()) || adminAreas)
+                                {
+                                    <td><a asp-controller="Teams" asp-action="Team" asp-route-teamId="@team.Id" asp-route-projId="@project.Id" class="btn btn-info btn-sm">Info</a></td>
+                                }
+                                else
+                                {
+                                    <td><span class="btn btn-secondary disabled btn-sm">Info</span></td>
+                                }
+                                @if (adminAreas)
+                                {
+                                    <td>
+                                        <a asp-controller="Teams" asp-action="RemoveTeam" asp-route-teamId="@team.Id" class="btn btn-danger btn-sm">
+                                            <span class="glyphicon glyphicon-remove"></span> Remove
+                                        </a>
+                                    </td>
+                                }
+                            </tr>
+                                j++;
                             }
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var team in project.TeamViewModels)
-                        {
-                        <tr>
-                            <th scope="row">@j</th>
-                            <td><span>@team.Name</span></td>
-                            <td><span>@team.Status</span></td>
-                            @if (team.Members.Select(t => t.UserName).Contains(User.Claims.Where(c => c.Type == "Name").Select(c => c.Value).SingleOrDefault()) || adminAreas)
-                            {
-                                <td><a asp-controller="Teams" asp-action="Team" asp-route-teamId="@team.Id" asp-route-projId="@project.Id" class="btn btn-info btn-sm">Info</a></td>
-                            }
-                            else
-                            {
-                                <td><span class="btn btn-secondary disabled btn-sm">Info</span></td>
-                            }
-                            @if (adminAreas)
-                            {
-                                <td>
-                                    <a asp-controller="Teams" asp-action="RemoveTeam" asp-route-teamId="@team.Id" class="btn btn-danger btn-sm">
-                                        <span class="glyphicon glyphicon-remove"></span> Remove
-                                    </a>
-                                </td>
-                            }
-                        </tr>
-                            j++;
-                        }
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                }
             </div>
         </div>
     </div>
@@ -224,12 +236,9 @@
                         <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </form>
-
             </div>
             <!-- Modal Content: ends -->
-
         </div>
-
     </div>
     <div class="modal fade bs-team-modal-new" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 
@@ -261,12 +270,9 @@
                         <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </form>
-
             </div>
             <!-- Modal Content: ends -->
-
         </div>
-
     </div>
 </div>
 
@@ -299,10 +305,8 @@
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </form>
-
         </div>
         <!-- Modal Content: ends -->
-
     </div>
 </div>
 <div class="modal fade bs-removeAdmin-modal-new" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -334,10 +338,8 @@
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </form>
-
         </div>
         <!-- Modal Content: ends -->
-
     </div>
 </div>
 <div id="error-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-modal="true" style="display: none;">
@@ -349,7 +351,6 @@
             <div class="modal-body d-flex justify-content-center">
                 <h3>@ViewBag.ErrorMessage</h3>
             </div>
-
         </div>
     </div>
 </div>

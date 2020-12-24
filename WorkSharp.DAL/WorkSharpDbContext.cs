@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.AspNetCore.Identity;
 using WorkSharp.DAL.DbModels;
 
 namespace WorkSharp.DAL
@@ -15,7 +12,11 @@ namespace WorkSharp.DAL
         public DbSet<DbTaskBoard> TaskBoards { get; set; }
         public DbSet<DbTeam> Teams { get; set; }
         public DbSet<DbSolution> Solutions { get; set; }
-        public WorkSharpDbContext(DbContextOptions<WorkSharpDbContext> options) : base(options) { }
+
+        public WorkSharpDbContext(DbContextOptions<WorkSharpDbContext> options) : base(options)
+        {
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -44,8 +45,8 @@ namespace WorkSharp.DAL
                 .HasMany(p => p.Admins)
                 .WithMany(a => a.Projects)
                 .UsingEntity(j => j.ToTable("ProjectAdmins"))
-                .HasOne(p=>p.Creator)
-                .WithMany(u=>u.AdminProjects);
+                .HasOne(p => p.Creator)
+                .WithMany(u => u.AdminProjects);
             //    pa => pa
             //        .HasOne(pa => pa.Admin)
             //        .WithMany()

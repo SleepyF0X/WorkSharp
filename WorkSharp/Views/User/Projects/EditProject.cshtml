@@ -3,9 +3,9 @@
 <div class="container d-flex justify-content-center project-info">
     <form asp-controller="Projects">
         <label>Project Name</label>
-        <input class="form-control" type="text" asp-for="Name" value="@Model.Name"/><br/>
+        <input class="form-control" type="text" asp-for="Name" value="@Model.Name" /><br />
         <label>Project Info</label>
-        <input class="form-control" type="text" asp-for="Info" value="@Model.Info"/><br/>
+        <input class="form-control" type="text" asp-for="Info" value="@Model.Info" /><br />
         <button type="submit" class="btn btn-primary" asp-action="EditProject" asp-route-id="@Model.Id">Save</button>
         <button type="submit" class="btn btn-danger" asp-action="Project", asp-route-projectId="@Model.Id">Cancel</button>
     </form>

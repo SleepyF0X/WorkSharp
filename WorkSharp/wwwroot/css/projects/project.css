@@ -2,7 +2,6 @@
     margin-top: 100px;
 }
 
-
 .wrap {
     padding: 15px;
 }
@@ -28,9 +27,11 @@ modal-title {
 .centered {
     text-align: center;
 }
+
 .tables {
     width: 44%;
 }
+
 table td, th {
     text-align: center;
 }

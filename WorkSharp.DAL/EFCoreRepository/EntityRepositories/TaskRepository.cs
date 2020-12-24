@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using WorkSharp.DAL.DbModels;
 using WorkSharp.DAL.EFCoreRepository.IEntityRepositories;
 
@@ -13,14 +11,16 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
     {
         private WorkSharpDbContext _context;
         private DbSet<DbTask> _dbSet;
+
         public TaskRepository(WorkSharpDbContext context)
         {
             _context = context;
             _dbSet = _context.Tasks;
         }
+
         public IReadOnlyCollection<DbTask> GetTaskBoardTasks(Guid taskBoardId)
         {
-            return _dbSet.Include(t=>t.Executor).Include(t=>t.Solution).Where(t => t.TaskBoardId.Equals(taskBoardId)).ToList().AsReadOnly();
+            return _dbSet.Include(t => t.Executor).Include(t => t.Solution).Where(t => t.TaskBoardId.Equals(taskBoardId)).ToList().AsReadOnly();
         }
 
         public void CreateTask(DbTask task)

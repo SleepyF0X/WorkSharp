@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using WorkSharp.DAL.DbModels;
-using WorkSharp.DAL.EFCoreRepository;
 using WorkSharp.DAL.EFCoreRepository.IEntityRepositories;
-using WorkSharp.ViewModels;
 using WorkSharp.ViewModels.User;
 using WorkSharp.ViewModels.User.Multiply;
 
@@ -22,12 +20,14 @@ namespace WorkSharp.Controllers.User
         private readonly IProjectRepository _projectRepository;
         private readonly IMapper _mapper;
         private readonly UserManager<DbUser> _userManager;
+
         public ProjectsController(IProjectRepository projectRepository, IMapper mapper, UserManager<DbUser> userManager)
         {
             _projectRepository = projectRepository;
             _mapper = mapper;
             _userManager = userManager;
         }
+
         public IActionResult Projects()
         {
             var userId = GetUserId();
@@ -120,36 +120,38 @@ namespace WorkSharp.Controllers.User
         public async Task<IActionResult> AddAdmin(TeamTaskBoardViewModel teamTaskBoardViewModel, Guid projectId)
         {
             var userId = teamTaskBoardViewModel.NewAdminId;
-            if(_projectRepository.AddAdmin(projectId, userId))
+            if (_projectRepository.AddAdmin(projectId, userId))
             {
                 _projectRepository.Save();
-                return RedirectToAction("Project", "Projects", new{projectId});
+                return RedirectToAction("Project", "Projects", new { projectId });
             }
 
             TempData["ErrorMessage"] = "Admin Exist";
-            return RedirectToAction("Project", "Projects", new{projectId});
+            return RedirectToAction("Project", "Projects", new { projectId });
         }
+
         public async Task<IActionResult> RemoveAdmin(TeamTaskBoardViewModel teamTaskBoardViewModel, Guid projectId)
         {
             if (_projectRepository.GetByIdSecure(projectId, GetUserId()).CreatorId
                 .Equals(teamTaskBoardViewModel.RemoveAdminId))
             {
                 TempData["ErrorMessage"] = "You are Creator :)";
-                return RedirectToAction("Project", "Projects", new{projectId});
+                return RedirectToAction("Project", "Projects", new { projectId });
             }
             var userId = teamTaskBoardViewModel.RemoveAdminId;
-            if(_projectRepository.RemoveAdmin(projectId, userId))
+            if (_projectRepository.RemoveAdmin(projectId, userId))
             {
                 _projectRepository.Save();
-                return RedirectToAction("Project", "Projects", new{projectId});
+                return RedirectToAction("Project", "Projects", new { projectId });
             }
 
             TempData["ErrorMessage"] = "Admin NOT Exist";
-            return RedirectToAction("Project", "Projects", new{projectId});
+            return RedirectToAction("Project", "Projects", new { projectId });
         }
+
         private Guid GetUserId()
         {
-            return Guid.Parse((ReadOnlySpan<char>) HttpContext.User.Claims.SingleOrDefault(c=>c.Type.Equals("Id"))?.Value);
+            return Guid.Parse((ReadOnlySpan<char>)HttpContext.User.Claims.SingleOrDefault(c => c.Type.Equals("Id"))?.Value);
         }
     }
 }
