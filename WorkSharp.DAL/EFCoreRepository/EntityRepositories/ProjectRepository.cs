@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
 using WorkSharp.DAL.DbModels;
 using WorkSharp.DAL.EFCoreRepository.IEntityRepositories;
 
@@ -12,6 +11,7 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
     {
         private WorkSharpDbContext _context;
         private DbSet<DbProject> _dbSet;
+
         public ProjectRepository(WorkSharpDbContext context)
         {
             _context = context;
@@ -28,13 +28,13 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
             var projects = _context.Projects
                 .AsNoTracking()
                 .Include(p => p.Admins)
-                .Include(p=>p.Creator)
+                .Include(p => p.Creator)
                 .Include(p => p.Teams)
-                .ThenInclude(t=>t.Members)
+                .ThenInclude(t => t.Members)
                 .Include(p => p.Teams)
-                .ThenInclude(t=>t.TaskBoards)
+                .ThenInclude(t => t.TaskBoards)
                 .Where(p => p.Admins.Select(a => a.Id).Contains(userId) ||
-                            p.Teams.SelectMany(t => t.Members).Any(m=>m.Id.Equals(userId))).ToList().AsReadOnly();
+                            p.Teams.SelectMany(t => t.Members).Any(m => m.Id.Equals(userId))).ToList().AsReadOnly();
             return projects;
         }
 
@@ -45,8 +45,8 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
             if (project != null)
             {
                 project.TaskBoards = _context.TaskBoards
-                    .Include(tb=>tb.Team)
-                    .ThenInclude(t=>t.Members)
+                    .Include(tb => tb.Team)
+                    .ThenInclude(t => t.Members)
                     .Where(tb => tb.ProjectId.Equals(project.Id))
                     .ToList();
                 return project;
@@ -96,7 +96,7 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
 
         public bool IsAdmin(Guid projectId, Guid userId)
         {
-            if (_context.Projects.AsNoTracking().Include(p => p.Admins).Include(p=>p.Creator).FirstOrDefault(p => p.Id.Equals(projectId)).Admins
+            if (_context.Projects.AsNoTracking().Include(p => p.Admins).Include(p => p.Creator).FirstOrDefault(p => p.Id.Equals(projectId)).Admins
                 .Any(a => a.Id.Equals(userId)))
             {
                 return true;
@@ -107,16 +107,17 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
 
         public bool IsCreator(Guid projectId, Guid userId)
         {
-            if (_context.Projects.AsNoTracking().FirstOrDefault(p=>p.Id.Equals(projectId)).CreatorId.Equals(userId))
+            if (_context.Projects.AsNoTracking().FirstOrDefault(p => p.Id.Equals(projectId)).CreatorId.Equals(userId))
             {
                 return true;
             }
 
             return false;
         }
+
         public bool AddAdmin(Guid projectId, Guid userId)
         {
-            var dbProject = _dbSet.Include(p=>p.Admins).FirstOrDefault(p => p.Id.Equals(projectId));
+            var dbProject = _dbSet.Include(p => p.Admins).FirstOrDefault(p => p.Id.Equals(projectId));
             if (dbProject.Admins.Select(m => m.Id).Contains(userId))
             {
                 return false;
@@ -128,7 +129,7 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
 
         public bool RemoveAdmin(Guid projectId, Guid userId)
         {
-            var dbProject = _dbSet.Include(p=>p.Admins).FirstOrDefault(p => p.Id.Equals(projectId));
+            var dbProject = _dbSet.Include(p => p.Admins).FirstOrDefault(p => p.Id.Equals(projectId));
             if (!dbProject.Admins.Select(m => m.Id).Contains(userId))
             {
                 return false;

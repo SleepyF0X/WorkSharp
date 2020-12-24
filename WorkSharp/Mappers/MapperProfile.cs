@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using WorkSharp.DAL.DbModels;
-using WorkSharp.ViewModels;
 using WorkSharp.ViewModels.Authentication;
 using WorkSharp.ViewModels.User;
 
@@ -22,9 +19,9 @@ namespace WorkSharp.Mappers
                     opt => opt.MapFrom(
                         source => source.Teams))
                 .ForMember(
-                    dest=>dest.Creator, 
+                    dest => dest.Creator,
                     opt => opt.MapFrom(
-                        source=>source.Creator))
+                        source => source.Creator))
                 .ReverseMap();
             CreateMap<DbUser, RegisterViewModel>()
                 .ReverseMap();
@@ -44,7 +41,7 @@ namespace WorkSharp.Mappers
                 .ReverseMap();
             CreateMap<DbUser, UserViewModel>()
                 .ForMember(
-                    dest => dest.Teams, 
+                    dest => dest.Teams,
                     opt => opt.MapFrom(
                         source => source.Teams))
                 .ReverseMap();

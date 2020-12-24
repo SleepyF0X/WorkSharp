@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using WorkSharp.DAL.DbModels;
 using WorkSharp.DAL.EFCoreRepository.IEntityRepositories;
 using WorkSharp.ViewModels.User;
@@ -18,6 +15,7 @@ namespace WorkSharp.Controllers.User
         private readonly IProjectRepository _projectRepository;
         private readonly IMapper _mapper;
         private readonly UserManager<DbUser> _userManager;
+
         public TaskBoardsController(ITaskBoardRepository repository, IMapper mapper, UserManager<DbUser> userManager, IProjectRepository projectRepository)
         {
             _repository = repository;
@@ -25,6 +23,7 @@ namespace WorkSharp.Controllers.User
             _userManager = userManager;
             _projectRepository = projectRepository;
         }
+
         public IActionResult TaskBoard(Guid taskBoardId)
         {
             if (TempData["ErrorMessage"] != null)
@@ -47,7 +46,7 @@ namespace WorkSharp.Controllers.User
                 var taskBoardProjectId = _repository.GetByIdSecure(taskBoardId, userId).ProjectId;
                 _repository.DeleteSecure(taskBoardId, userId);
                 _repository.Save();
-                return RedirectToAction("Project", "Projects", new {projectId = taskBoardProjectId});
+                return RedirectToAction("Project", "Projects", new { projectId = taskBoardProjectId });
             }
             else
             {
@@ -55,7 +54,7 @@ namespace WorkSharp.Controllers.User
                 var taskBoard = _repository.GetByIdSecure(taskBoardId, userId);
                 _repository.DeleteSecure(taskBoardId, userId);
                 _repository.Save();
-                return RedirectToAction("Team", "Teams", new {taskBoard.TeamId, projId = taskBoard.ProjectId});
+                return RedirectToAction("Team", "Teams", new { taskBoard.TeamId, projId = taskBoard.ProjectId });
             }
         }
 
@@ -67,19 +66,18 @@ namespace WorkSharp.Controllers.User
                 var dbTaskBoard = _mapper.Map<DbTaskBoard>(taskBoardViewModel);
                 _repository.Create(dbTaskBoard);
                 _repository.Save();
-                return RedirectToAction("Project", "Projects", new{projectId = taskBoardViewModel.ProjectId});
+                return RedirectToAction("Project", "Projects", new { projectId = taskBoardViewModel.ProjectId });
             }
-
             else
             {
                 var taskBoardViewModel = teamTaskBoardViewModel.TaskBoardViewModel;
                 var dbTaskBoard = _mapper.Map<DbTaskBoard>(taskBoardViewModel);
                 _repository.Create(dbTaskBoard);
                 _repository.Save();
-                return RedirectToAction("Team", "Teams", new{taskBoardViewModel.TeamId, projId = taskBoardViewModel.ProjectId});
+                return RedirectToAction("Team", "Teams", new { taskBoardViewModel.TeamId, projId = taskBoardViewModel.ProjectId });
             }
-            
         }
+
         //public IActionResult CreateTaskBoard(TaskBoardViewModel taskBoardViewModel)
         //{
         //    var dbTaskBoard = _mapper.Map<DbTaskBoard>(taskBoardViewModel);

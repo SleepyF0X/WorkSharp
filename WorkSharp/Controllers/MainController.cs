@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using WorkSharp.DAL.DbModels;
-using WorkSharp.DAL.EFCoreRepository;
-using WorkSharp.ViewModels;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace WorkSharp.Controllers
 {

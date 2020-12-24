@@ -1,16 +1,13 @@
-﻿using System;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using WorkSharp.DAL.DbModels;
-using WorkSharp.DAL.EFCoreRepository;
 using WorkSharp.ViewModels.Authentication;
 
 namespace WorkSharp.Controllers
@@ -27,6 +24,7 @@ namespace WorkSharp.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
         }
+
         [HttpGet]
         public IActionResult Login()
         {
@@ -59,7 +57,7 @@ namespace WorkSharp.Controllers
             }
             else
             {
-                ViewBag.ErrorMessage = regResult.Errors.Select(e=>e.Description).Aggregate((a, b) => a + ", " + b);
+                ViewBag.ErrorMessage = regResult.Errors.Select(e => e.Description).Aggregate((a, b) => a + ", " + b);
                 return View(model);
             }
         }
@@ -79,6 +77,7 @@ namespace WorkSharp.Controllers
             }
             return View("Login", model);
         }
+
         [Authorize]
         public async Task<IActionResult> LogOut()
         {

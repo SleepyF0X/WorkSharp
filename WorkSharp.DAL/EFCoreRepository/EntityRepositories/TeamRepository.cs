@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
 using WorkSharp.DAL.DbModels;
 using WorkSharp.DAL.EFCoreRepository.IEntityRepositories;
 
@@ -13,6 +12,7 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
         private IProjectRepository _projectRepository;
         private WorkSharpDbContext _context;
         private DbSet<DbTeam> _dbSet;
+
         public TeamRepository(WorkSharpDbContext context, IProjectRepository projectRepository)
         {
             _context = context;
@@ -36,7 +36,7 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
 
         public bool AddMember(Guid teamId, Guid memberId)
         {
-            var dbTeam = _dbSet.Include(t=>t.Members).FirstOrDefault(t => t.Id.Equals(teamId));
+            var dbTeam = _dbSet.Include(t => t.Members).FirstOrDefault(t => t.Id.Equals(teamId));
             if (dbTeam.Members.Select(m => m.Id).Contains(memberId))
             {
                 return false;
@@ -45,6 +45,7 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
             _context.SaveChanges();
             return true;
         }
+
         public void RemoveMember(Guid teamId, Guid memberId)
         {
             var dbTeam = _dbSet.Include(t => t.Members).FirstOrDefault(t => t.Id.Equals(teamId));
@@ -56,8 +57,8 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
         {
             return _dbSet.Where(t => t.Members.Any(s => s.Id.Equals(userId)))
                 .Include(team => team.Members)
-                .ThenInclude(m=>m.Teams)
-                .Include(t=>t.TaskBoards)
+                .ThenInclude(m => m.Teams)
+                .Include(t => t.TaskBoards)
                 .ToList()
                 .AsReadOnly();
         }
@@ -71,8 +72,8 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
         {
             var dbTeam = _context.Teams
                 .Include(t => t.Members)
-                .ThenInclude(m=>m.Teams)
-                .Include(t=>t.TaskBoards)
+                .ThenInclude(m => m.Teams)
+                .Include(t => t.TaskBoards)
                 .FirstOrDefault(t => t.Id.Equals(teamId));
             var projectId = dbTeam.ProjectId;
             if (_projectRepository.IsAdmin(projectId, userId))
@@ -112,8 +113,8 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
         {
             return _dbSet.Where(t => t.ProjectId.Equals(projectId))
                 .Include(team => team.Members)
-                .ThenInclude(m=>m.Teams)
-                .Include(t=>t.TaskBoards)
+                .ThenInclude(m => m.Teams)
+                .Include(t => t.TaskBoards)
                 .ToList()
                 .AsReadOnly();
         }

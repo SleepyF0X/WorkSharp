@@ -2,11 +2,9 @@ import {AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors} fr
 import {Injectable} from '@angular/core';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 
-
 export declare interface ServerError {
     [key: string]: [];
 }
-
 
 @Injectable({
     providedIn: 'root'
@@ -17,11 +15,9 @@ export class ErrorHandler {
     private errorObject: ServerError;
     private message: string;
 
-
     private static hasError(control: AbstractControl): boolean {
         return control.invalid && (control.dirty || control.touched);
     }
-
 
     /**
      * Takes server error obj and set errors to appropriate fields at form given.
@@ -110,7 +106,6 @@ export class ErrorHandler {
             if (controls[control] instanceof FormArray) {
                 Object.defineProperty(this.errorObject, control, {value: [], writable: true});
                 this.findErrorsOnFormArrays(controls[control] as FormArray, control);
-
             } else if (controls[control] instanceof FormControl) {
                 this.findErrorsOnFormControls(controls, control);
             }

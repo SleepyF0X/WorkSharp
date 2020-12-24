@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
 using WorkSharp.DAL.DbModels;
 using WorkSharp.DAL.EFCoreRepository.IEntityRepositories;
 
@@ -13,12 +12,14 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
         private IProjectRepository _projectRepository;
         private WorkSharpDbContext _context;
         private DbSet<DbTaskBoard> _dbSet;
+
         public TaskBoardRepository(WorkSharpDbContext context, IProjectRepository projectRepository)
         {
             _context = context;
             _dbSet = _context.TaskBoards;
             _projectRepository = projectRepository;
         }
+
         public IReadOnlyCollection<DbTaskBoard> GetAll()
         {
             throw new NotImplementedException();
@@ -36,10 +37,10 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
         {
             var dbTaskBoard = _context.TaskBoards
                 .Include(tb => tb.Tasks)
-                .ThenInclude(t=>t.Solution)
-                .Include(tb=>tb.Project)
-                .Include(tb=>tb.Team)
-                .ThenInclude(t=>t.Members)
+                .ThenInclude(t => t.Solution)
+                .Include(tb => tb.Project)
+                .Include(tb => tb.Team)
+                .ThenInclude(t => t.Members)
                 .FirstOrDefault(t => t.Id.Equals(taskBoardId));
             var projectId = dbTaskBoard.ProjectId;
             if (_projectRepository.IsAdmin(projectId, userId))

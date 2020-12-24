@@ -1,19 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
 using WorkSharp.DAL;
-using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using WorkSharp.DAL.DbModels;
-using WorkSharp.DAL.EFCoreRepository;
 using WorkSharp.DAL.EFCoreRepository.EntityRepositories;
 using WorkSharp.DAL.EFCoreRepository.IEntityRepositories;
 using WorkSharp.Mappers;
@@ -23,7 +17,9 @@ namespace WorkSharp
     public class Startup
     {
         public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration) => Configuration = configuration;
+
         public void ConfigureServices(IServiceCollection services)
         {
             var connectionString = Configuration.GetConnectionString("Connection");

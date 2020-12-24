@@ -1,82 +1,82 @@
 <UserSettings>
-  <ApplicationIdentity version="14.0"/>
+  <ApplicationIdentity version="14.0" />
   <ToolsOptions>
-    <ToolsOptionsCategory name="Environment" RegisteredName="Environment"/>
+    <ToolsOptionsCategory name="Environment" RegisteredName="Environment" />
   </ToolsOptions>
   <Category name="Environment_Group" RegisteredName="Environment_Group">
     <Category name="Environment_FontsAndColors" Category="{1EDA5DD4-927A-43a7-810E-7FD247D0DA1D}" Package="{DA9FB551-C724-11d0-AE1F-00A0C90FFFC3}" RegisteredName="Environment_FontsAndColors" PackageName="Visual Studio Environment Package">
       <PropertyValue name="Version">2</PropertyValue>
       <FontsAndColors Version="2.0">
-        <Theme Id="{1DED0138-47CE-435E-84EF-9EC1F439B749}"/>
+        <Theme Id="{1DED0138-47CE-435E-84EF-9EC1F439B749}" />
         <Categories>
           <Category GUID="{58E96763-1D3B-4E05-B6BA-FF7115FD0B7B}" FontIsDefault="Yes">
             <Items>
-              <Item Name="Plain Text" Foreground="0x00FFBEB9" Background="0x001E1E1E" BoldFont="No"/>
+              <Item Name="Plain Text" Foreground="0x00FFBEB9" Background="0x001E1E1E" BoldFont="No" />
             </Items>
           </Category>
           <Category GUID="{FA937F7B-C0D2-46B8-9F10-A7A92642B384}" FontIsDefault="Yes">
             <Items>
-              <Item Name="Artboard Background" Foreground="0x02000000" Background="0x02000000" BoldFont="No"/>
+              <Item Name="Artboard Background" Foreground="0x02000000" Background="0x02000000" BoldFont="No" />
             </Items>
           </Category>
           <Category GUID="{B36B0228-DBAD-4DB0-B9C7-2AD3E572010F}" FontName="Segoe UI" FontSize="9" CharSet="1" FontIsDefault="No">
             <Items>
-              <Item Name="Odd Row Items" Foreground="0x00000000" Background="0x00FFFFFF" BoldFont="No"/>
-              <Item Name="Even Row Items" Foreground="0x00000000" Background="0x00FFFFFF" BoldFont="No"/>
-              <Item Name="Not Downloaded" Foreground="0x00999999" Background="0x00FFFFFF" BoldFont="No"/>
-              <Item Name="Target Only" Foreground="0x00000000" Background="0x00FFFFFF" BoldFont="No"/>
-              <Item Name="Source Only" Foreground="0x00000000" Background="0x00FFFFFF" BoldFont="No"/>
-              <Item Name="Identical content" Foreground="0x00000000" Background="0x00FFFFFF" BoldFont="No"/>
-              <Item Name="Different content" Foreground="0x000014E5" Background="0x00FFFFFF" BoldFont="No"/>
+              <Item Name="Odd Row Items" Foreground="0x00000000" Background="0x00FFFFFF" BoldFont="No" />
+              <Item Name="Even Row Items" Foreground="0x00000000" Background="0x00FFFFFF" BoldFont="No" />
+              <Item Name="Not Downloaded" Foreground="0x00999999" Background="0x00FFFFFF" BoldFont="No" />
+              <Item Name="Target Only" Foreground="0x00000000" Background="0x00FFFFFF" BoldFont="No" />
+              <Item Name="Source Only" Foreground="0x00000000" Background="0x00FFFFFF" BoldFont="No" />
+              <Item Name="Identical content" Foreground="0x00000000" Background="0x00FFFFFF" BoldFont="No" />
+              <Item Name="Different content" Foreground="0x000014E5" Background="0x00FFFFFF" BoldFont="No" />
             </Items>
           </Category>
           <Category GUID="{75A05685-00A8-4DED-BAE5-E7A50BFA929A}" FontIsDefault="Yes">
             <Items>
-              <Item Name="XML Doc Tag" Foreground="0x0000FF00" Background="0x01000001" BoldFont="No"/>
-              <Item Name="Line Number" Foreground="0x007F7F7F" Background="0x01000001" BoldFont="No"/>
-              <Item Name="Number" Foreground="0x0080D8FF" Background="0x02000000" BoldFont="No"/>
-              <Item Name="Operator" Foreground="0x00D8E66A" Background="0x02000000" BoldFont="No"/>
-              <Item Name="Comment" Foreground="0x00575757" Background="0x02000000" BoldFont="No"/>
-              <Item Name="HTML Element Name" Foreground="0x009C56D6" Background="0x02000000" BoldFont="No"/>
-              <Item Name="HTML Comment" Foreground="0x008A5656" Background="0x02000000" BoldFont="No"/>
-              <Item Name="HTML Attribute" Foreground="0x00DC9CFE" Background="0x02000000" BoldFont="No"/>
-              <Item Name="xml doc comment - text" Foreground="0x009C9C9C" Background="0x02000000" BoldFont="No"/>
-              <Item Name="xml doc comment - processing instruction" Foreground="0x000000FF" Background="0x02000000" BoldFont="No"/>
-              <Item Name="xml doc comment - name" Foreground="0x009785A7" Background="0x02000000" BoldFont="No"/>
-              <Item Name="xml doc comment - delimiter" Foreground="0x00565656" Background="0x02000000" BoldFont="No"/>
-              <Item Name="xml doc comment - attribute name" Foreground="0x00D1C8D2" Background="0x02000000" BoldFont="No"/>
-              <Item Name="HtmlClientTemplateValueFormatDefinition" Foreground="0x00ADD8E6" Background="0x01000001" BoldFont="No"/>
-              <Item Name="HtmlClientTemplateTagFormatDefinition" Foreground="0x00E6AEAD" Background="0x01000001" BoldFont="Yes"/>
-              <Item Name="ReSharper Type Parameter Identifier" Foreground="0x00C8C8E6" Background="0x01000001" BoldFont="No"/>
-              <Item Name="ReSharper Delegate Identifier" Foreground="0x00E66C9F" Background="0x01000001" BoldFont="No"/>
-              <Item Name="ReSharper Interface Identifier" Foreground="0x004EC9A8" Background="0x01000001" BoldFont="No"/>
-              <Item Name="ReSharper Enum Identifier" Foreground="0x009C56D6" Background="0x01000001" BoldFont="No"/>
-              <Item Name="ReSharper Struct Identifier" Foreground="0x00FFC94E" Background="0x01000001" BoldFont="No"/>
-              <Item Name="ReSharper Static Class Identifier" Foreground="0x00B0C900" Background="0x01000001" BoldFont="No"/>
-              <Item Name="ReSharper Class Identifier" Foreground="0x0092C94E" Background="0x01000001" BoldFont="No"/>
-              <Item Name="ReSharper JavaScript Unknown Property Identifier" Foreground="0x000000FF" Background="0x01000001" BoldFont="No"/>
-              <Item Name="ReSharper JavaScript Property Identifier" Foreground="0x00E6E6E6" Background="0x01000001" BoldFont="No"/>
-              <Item Name="ReSharper JavaScript Function Identifier" Foreground="0x00E6D8AD" Background="0x01000001" BoldFont="No"/>
-              <Item Name="ReSharper JavaScript Parameter Identifier" Foreground="0x00ADD8E6" Background="0x01000001" BoldFont="No"/>
-              <Item Name="ReSharper JavaScript Local Variable Identifier" Foreground="0x00ADE6AD" Background="0x01000001" BoldFont="No"/>
-              <Item Name="ReSharper Namespace Identifier" Foreground="0x00D8E6AD" Background="0x01000001" BoldFont="Yes"/>
-              <Item Name="ReSharper Extension Method Identifier" Foreground="0x00E6AEAD" Background="0x01000001" BoldFont="No"/>
-              <Item Name="ReSharper Method Identifier" Foreground="0x00E6D8AD" Background="0x01000001" BoldFont="No"/>
-              <Item Name="ReSharper Parameter Identifier" Foreground="0x0066A1FF" Background="0x01000001" BoldFont="No"/>
-              <Item Name="ReSharper Local Variable Identifier" Foreground="0x0075C181" Background="0x01000001" BoldFont="No"/>
-              <Item Name="ReSharper Field Identifier" Foreground="0x00E6E6E6" Background="0x01000001" BoldFont="No"/>
-              <Item Name="ReSharper Constant Identifier" Foreground="0x00D8ADE6" Background="0x01000001" BoldFont="No"/>
-              <Item Name="ReSharper HTML Entity" Foreground="0x000000FF" Background="0x01000001" BoldFont="No"/>
-              <Item Name="ReSharper HTML ID attribute" Foreground="0x0000FF00" Background="0x01000001" BoldFont="No"/>
-              <Item Name="ReSharper Todo Item" Foreground="0x006A6AE6" Background="0x01000001" BoldFont="No"/>
+              <Item Name="XML Doc Tag" Foreground="0x0000FF00" Background="0x01000001" BoldFont="No" />
+              <Item Name="Line Number" Foreground="0x007F7F7F" Background="0x01000001" BoldFont="No" />
+              <Item Name="Number" Foreground="0x0080D8FF" Background="0x02000000" BoldFont="No" />
+              <Item Name="Operator" Foreground="0x00D8E66A" Background="0x02000000" BoldFont="No" />
+              <Item Name="Comment" Foreground="0x00575757" Background="0x02000000" BoldFont="No" />
+              <Item Name="HTML Element Name" Foreground="0x009C56D6" Background="0x02000000" BoldFont="No" />
+              <Item Name="HTML Comment" Foreground="0x008A5656" Background="0x02000000" BoldFont="No" />
+              <Item Name="HTML Attribute" Foreground="0x00DC9CFE" Background="0x02000000" BoldFont="No" />
+              <Item Name="xml doc comment - text" Foreground="0x009C9C9C" Background="0x02000000" BoldFont="No" />
+              <Item Name="xml doc comment - processing instruction" Foreground="0x000000FF" Background="0x02000000" BoldFont="No" />
+              <Item Name="xml doc comment - name" Foreground="0x009785A7" Background="0x02000000" BoldFont="No" />
+              <Item Name="xml doc comment - delimiter" Foreground="0x00565656" Background="0x02000000" BoldFont="No" />
+              <Item Name="xml doc comment - attribute name" Foreground="0x00D1C8D2" Background="0x02000000" BoldFont="No" />
+              <Item Name="HtmlClientTemplateValueFormatDefinition" Foreground="0x00ADD8E6" Background="0x01000001" BoldFont="No" />
+              <Item Name="HtmlClientTemplateTagFormatDefinition" Foreground="0x00E6AEAD" Background="0x01000001" BoldFont="Yes" />
+              <Item Name="ReSharper Type Parameter Identifier" Foreground="0x00C8C8E6" Background="0x01000001" BoldFont="No" />
+              <Item Name="ReSharper Delegate Identifier" Foreground="0x00E66C9F" Background="0x01000001" BoldFont="No" />
+              <Item Name="ReSharper Interface Identifier" Foreground="0x004EC9A8" Background="0x01000001" BoldFont="No" />
+              <Item Name="ReSharper Enum Identifier" Foreground="0x009C56D6" Background="0x01000001" BoldFont="No" />
+              <Item Name="ReSharper Struct Identifier" Foreground="0x00FFC94E" Background="0x01000001" BoldFont="No" />
+              <Item Name="ReSharper Static Class Identifier" Foreground="0x00B0C900" Background="0x01000001" BoldFont="No" />
+              <Item Name="ReSharper Class Identifier" Foreground="0x0092C94E" Background="0x01000001" BoldFont="No" />
+              <Item Name="ReSharper JavaScript Unknown Property Identifier" Foreground="0x000000FF" Background="0x01000001" BoldFont="No" />
+              <Item Name="ReSharper JavaScript Property Identifier" Foreground="0x00E6E6E6" Background="0x01000001" BoldFont="No" />
+              <Item Name="ReSharper JavaScript Function Identifier" Foreground="0x00E6D8AD" Background="0x01000001" BoldFont="No" />
+              <Item Name="ReSharper JavaScript Parameter Identifier" Foreground="0x00ADD8E6" Background="0x01000001" BoldFont="No" />
+              <Item Name="ReSharper JavaScript Local Variable Identifier" Foreground="0x00ADE6AD" Background="0x01000001" BoldFont="No" />
+              <Item Name="ReSharper Namespace Identifier" Foreground="0x00D8E6AD" Background="0x01000001" BoldFont="Yes" />
+              <Item Name="ReSharper Extension Method Identifier" Foreground="0x00E6AEAD" Background="0x01000001" BoldFont="No" />
+              <Item Name="ReSharper Method Identifier" Foreground="0x00E6D8AD" Background="0x01000001" BoldFont="No" />
+              <Item Name="ReSharper Parameter Identifier" Foreground="0x0066A1FF" Background="0x01000001" BoldFont="No" />
+              <Item Name="ReSharper Local Variable Identifier" Foreground="0x0075C181" Background="0x01000001" BoldFont="No" />
+              <Item Name="ReSharper Field Identifier" Foreground="0x00E6E6E6" Background="0x01000001" BoldFont="No" />
+              <Item Name="ReSharper Constant Identifier" Foreground="0x00D8ADE6" Background="0x01000001" BoldFont="No" />
+              <Item Name="ReSharper HTML Entity" Foreground="0x000000FF" Background="0x01000001" BoldFont="No" />
+              <Item Name="ReSharper HTML ID attribute" Foreground="0x0000FF00" Background="0x01000001" BoldFont="No" />
+              <Item Name="ReSharper Todo Item" Foreground="0x006A6AE6" Background="0x01000001" BoldFont="No" />
             </Items>
           </Category>
           <Category GUID="{E0187991-B458-4F7E-8CA9-42C9A573B56C}" FontIsDefault="Yes">
             <Items>
-              <Item Name="XML Text" Foreground="0x000000FF" Background="0x02000000" BoldFont="No"/>
-              <Item Name="Operator" Foreground="0x00D8E66A" Background="0x02000000" BoldFont="No"/>
-              <Item Name="Number" Foreground="0x0080D8FF" Background="0x02000000" BoldFont="No"/>
-              <Item Name="Comment" Foreground="0x00575757" Background="0x02000000" BoldFont="No"/>
+              <Item Name="XML Text" Foreground="0x000000FF" Background="0x02000000" BoldFont="No" />
+              <Item Name="Operator" Foreground="0x00D8E66A" Background="0x02000000" BoldFont="No" />
+              <Item Name="Number" Foreground="0x0080D8FF" Background="0x02000000" BoldFont="No" />
+              <Item Name="Comment" Foreground="0x00575757" Background="0x02000000" BoldFont="No" />
             </Items>
           </Category>
         </Categories>
