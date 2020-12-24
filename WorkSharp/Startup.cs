@@ -34,6 +34,7 @@ namespace WorkSharp
             services.AddScoped<ITaskBoardRepository, TaskBoardRepository>();
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<ITeamRepository, TeamRepository>();
+            services.AddScoped<ISolutionRepository, SolutionRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddIdentity<DbUser, DbRole>().AddEntityFrameworkStores<WorkSharpDbContext>();
             services.Configure<IdentityOptions>(options =>

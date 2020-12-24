@@ -17,12 +17,7 @@ namespace WorkSharp.DAL.DbModels
         public DbUser Creator { get; set; }
         public IReadOnlyCollection<DbTaskBoard> TaskBoards { get; set; }
         public List<DbTeam> Teams { get; set; }
-        //public IReadOnlyCollection<DbUser> Members => Teams.SelectMany(team => team.TeamMembers.Select(tm => tm.Member)).ToList().AsReadOnly();
-
-        public IReadOnlyCollection<DbUser> Members()
-        {
-            return Teams.SelectMany(team => team.Members).ToList().AsReadOnly();
-        }
+        //public IReadOnlyCollection<DbUser> Members => Teams.SelectMany(team => team.Members).ToList().AsReadOnly();
 
     }
 }

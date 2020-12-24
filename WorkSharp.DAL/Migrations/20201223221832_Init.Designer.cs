@@ -10,7 +10,7 @@ using WorkSharp.DAL;
 namespace WorkSharp.DAL.Migrations
 {
     [DbContext(typeof(WorkSharpDbContext))]
-    [Migration("20201223002008_Init")]
+    [Migration("20201223221832_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -202,6 +202,23 @@ namespace WorkSharp.DAL.Migrations
                     b.ToTable("AspNetRoles");
                 });
 
+            modelBuilder.Entity("WorkSharp.DAL.DbModels.DbSolution", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Solutions");
+                });
+
             modelBuilder.Entity("WorkSharp.DAL.DbModels.DbTask", b =>
                 {
                     b.Property<Guid>("Id")
@@ -211,7 +228,7 @@ namespace WorkSharp.DAL.Migrations
                     b.Property<DateTimeOffset>("Deadline")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid>("ExecutorId")
+                    b.Property<Guid?>("ExecutorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Info")
@@ -220,12 +237,17 @@ namespace WorkSharp.DAL.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("SolutionId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("TaskBoardId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ExecutorId");
+
+                    b.HasIndex("SolutionId");
 
                     b.HasIndex("TaskBoardId");
 
@@ -461,9 +483,11 @@ namespace WorkSharp.DAL.Migrations
                 {
                     b.HasOne("WorkSharp.DAL.DbModels.DbUser", "Executor")
                         .WithMany()
-                        .HasForeignKey("ExecutorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ExecutorId");
+
+                    b.HasOne("WorkSharp.DAL.DbModels.DbSolution", "Solution")
+                        .WithMany()
+                        .HasForeignKey("SolutionId");
 
                     b.HasOne("WorkSharp.DAL.DbModels.DbTaskBoard", "TaskBoard")
                         .WithMany("Tasks")
@@ -472,6 +496,8 @@ namespace WorkSharp.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Executor");
+
+                    b.Navigation("Solution");
 
                     b.Navigation("TaskBoard");
                 });

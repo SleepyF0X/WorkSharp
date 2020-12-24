@@ -14,5 +14,7 @@ namespace WorkSharp.DAL.DbModels
         public DateTimeOffset Deadline { get; set; }
         public Guid? ExecutorId { get; set; }
         public DbUser Executor { get; set; }
+        public Guid? SolutionId { get; set; }
+        public DbSolution Solution { get; set; }
     }
 }

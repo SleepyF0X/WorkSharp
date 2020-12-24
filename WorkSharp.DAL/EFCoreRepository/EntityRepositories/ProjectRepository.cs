@@ -102,6 +102,40 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
 
             return false;
         }
+
+        public bool IsCreator(Guid projectId, Guid userId)
+        {
+            if (_context.Projects.AsNoTracking().FirstOrDefault(p=>p.Id.Equals(projectId)).CreatorId.Equals(userId))
+            {
+                return true;
+            }
+
+            return false;
+        }
+        public bool AddAdmin(Guid projectId, Guid userId)
+        {
+            var dbProject = _dbSet.Include(p=>p.Admins).FirstOrDefault(p => p.Id.Equals(projectId));
+            if (dbProject.Admins.Select(m => m.Id).Contains(userId))
+            {
+                return false;
+            }
+            dbProject.Admins.Add(_context.Users.Find(userId));
+            _context.SaveChanges();
+            return true;
+        }
+
+        public bool RemoveAdmin(Guid projectId, Guid userId)
+        {
+            var dbProject = _dbSet.Include(p=>p.Admins).FirstOrDefault(p => p.Id.Equals(projectId));
+            if (!dbProject.Admins.Select(m => m.Id).Contains(userId))
+            {
+                return false;
+            }
+            dbProject.Admins.Remove(_context.Users.Find(userId));
+            _context.SaveChanges();
+            return true;
+        }
+
         public void Save()
         {
             _context.SaveChanges();

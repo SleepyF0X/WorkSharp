@@ -31,12 +31,17 @@ namespace WorkSharp.Controllers.User
             }
             var userId = GetUserId();
             var dbUser = _userRepository.GetById(userId);
-            //var dbUser = _userManager.Users.AsNoTracking().Include(u=>u.Projects).Include(u=>u.Teams).Include(u=>u.AdminProjects).FirstOrDefault(u => u.Id.Equals(userId));
             var userViewModel = _mapper.Map<UserViewModel>(dbUser);
             ViewData["Profile"] = userViewModel;
             return View("~/Views/User/Profile/Profile.cshtml");
         }
-
+        public async Task<IActionResult> GetProfile(Guid userId)
+        {
+            var dbUser = _userRepository.GetById(userId);
+            var userViewModel = _mapper.Map<UserViewModel>(dbUser);
+            ViewData["Profile"] = userViewModel;
+            return View("~/Views/User/Profile/Profile.cshtml");
+        }
         public async Task<IActionResult> EditProfile(UserViewModel userViewModel)
         {
             var userId = GetUserId();

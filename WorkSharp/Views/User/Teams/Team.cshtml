@@ -12,118 +12,133 @@
         crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <div class="m-5 d-flex flex-column justify-content-center project-info">
-    <div class="d-flex flex-column">
-        <h1>Name: @team.Name</h1><br />
-        <h2>Info: @team.Status</h2><br />
-        @*<a asp-controller="Projects" asp-action="GetEditProject" asp-route-projectId="@Model.Id" class="btn btn-info btn-lg">
-                <span class="glyphicon glyphicon-remove"></span> Edit
-            </a>*@
+    <div class="d-flex justify-content-center"> <h2>TEAM</h2> </div>
+    <div class="d-flex flex-column container">
+        <div class="card card-body">
+            <div class="d-flex justify-content-center align-items-center">
+                <div>
+                    <h3>Name: @team.Name</h3><br />
+                    <h4>Info: @team.Status</h4>
+                </div>
+
+            </div>
+        </div>
     </div>
     <div class="d-flex mt-5">
         <div class="d-flex flex-column align-items-center w-75">
-            <div class="d-flex align-items-center">
-                <h1>Members</h1>
-                @if (adminAreas)
-                {
-                    <div class="wrap">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-member-modal-new">
-                            Add Member
-                        </button>
-                    </div>
-                }
-            </div>
-            <table class="table project-table w-75">
-                <thead>
-                    <tr>
-                        <th scope="col" class="number">#</th>
-                        <th scope="col" class="name">Name</th>
-                        <th scope="col" class="info">Teams</th>
+            <div class="card align-items-center w-75">
+                <div class="d-flex align-items-center">
+                    <h1>Members</h1>
                     @if (adminAreas)
                     {
-                        <th scope="col" class="remove">Remove</th>
+                        <div class="wrap">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-member-modal-new">
+                                Add Member
+                            </button>
+                        </div>
                     }
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var member in team.Members)
-                    {
-                        <tr>
-                            <th scope="row">@i</th>
-                            <td><a asp-controller="Profile" asp-action="Profile" asp-route-projectId="@member.Id">@member.UserName</a></td>
-                            <td>
-                                @foreach (var memberTeam in member.Teams)
+                </div>
+                @if (team.Members.Any())
+                {
+                    <table class="table project-table w-75">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="number">#</th>
+                                <th scope="col" class="name">Name</th>
+                                <th scope="col" class="info">Teams</th>
+                                @if (adminAreas)
                                 {
-                                    <a asp-controller="Teams" asp-action="Team" asp-route-teamId="@memberTeam.Id" asp-route-projId="@memberTeam.ProjectId" class="btn btn-info btn-sm">@memberTeam.Name</a>
+                                    <th scope="col" class="remove">Remove</th>
                                 }
-                            </td>
-                            @if (adminAreas)
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var member in team.Members)
                             {
-                                <td>
-                                    <a asp-controller="Teams" asp-action="RemoveMember" asp-route-teamId="@team.Id" asp-route-projId="@team.ProjectId" asp-route-userId="@member.Id" class="btn btn-danger btn-sm">
-                                        <span class="glyphicon glyphicon-remove"></span> Remove
-                                    </a>
-                                </td>
+                                <tr>
+                                    <th scope="row">@i</th>
+                                    <td><a asp-controller="Profile" asp-action="GetProfile" asp-route-userId="@member.Id">@member.UserName</a></td>
+                                    <td>
+                                        @foreach (var memberTeam in member.Teams)
+                                        {
+                                            <a asp-controller="Teams" asp-action="Team" asp-route-teamId="@memberTeam.Id" asp-route-projId="@memberTeam.ProjectId" class="btn btn-info btn-sm">@memberTeam.Name</a>
+                                        }
+                                    </td>
+                                    @if (adminAreas)
+                                    {
+                                        <td>
+                                            <a asp-controller="Teams" asp-action="RemoveMember" asp-route-teamId="@team.Id" asp-route-projId="@team.ProjectId" asp-route-userId="@member.Id" class="btn btn-danger btn-sm">
+                                                <span class="glyphicon glyphicon-remove"></span> Remove
+                                            </a>
+                                        </td>
+                                    }
+                                </tr>
+                                i++;
                             }
-                        </tr>
-                        i++;
-                    }
-                </tbody>
-            </table>
+                        </tbody>
+                    </table>
+                }
+            </div>
         </div>
         <div class="d-flex flex-column align-items-center w-75">
-            <div class="d-flex align-items-center">
-                <h1>Task Boards</h1>
-                @if (adminAreas)
-                {
-                    <div class="wrap">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-taskBoard-modal-new">
-                            Add TaskBoard
-                        </button>
-                    </div>
-                }
-            </div>
-            <table class="table project-table w-75">
-                <thead>
-                    <tr>
-                        <th scope="col" class="number">#</th>
-                        <th scope="col" class="name">Name</th>
-                        <th scope="col" class="info">Type</th>
-                        <th scope="col" class="info">Info</th>
+            <div class="card align-items-center w-75">
+                <div class="d-flex align-items-center">
+                    <h1>Task Boards</h1>
                     @if (adminAreas)
                     {
-                        <th scope="col" class="remove">Remove</th>
+                        <div class="wrap">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-taskBoard-modal-new">
+                                Add TaskBoard
+                            </button>
+                        </div>
                     }
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var taskBoard in team.TaskBoards)
-                    {
-                        <tr>
-                            <th scope="row">@i</th>
-                            <td><span>@taskBoard.Name</span></td>
-                            <td>
-                                <span>@taskBoard.Type</span>
-                            </td>
-                            <td>
-                                <span>
-                                    <a asp-controller="TaskBoards" asp-action="TaskBoard" asp-route-taskBoardId="@taskBoard.Id" class="btn btn-info btn-sm">
-                                        <span class="glyphicon glyphicon-remove"></span> Info
-                                    </a>
-                                </span>
-                            </td>
-                            @if (adminAreas)
+                </div>
+                @if (team.TaskBoards.Any())
+                {
+                    <table class="table project-table w-75">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="number">#</th>
+                                <th scope="col" class="name">Name</th>
+                                <th scope="col" class="info">Type</th>
+                                <th scope="col" class="info">Info</th>
+                                @if (adminAreas)
+                                {
+                                    <th scope="col" class="remove">Remove</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var taskBoard in team.TaskBoards)
                             {
-                                <td>
-                                    <a asp-controller="TaskBoards" asp-action="RemoveTaskBoard" asp-route-taskBoardId="@taskBoard.Id" asp-route-page="team" class="btn btn-danger btn-sm">
-                                        <span class="glyphicon glyphicon-remove"></span> Remove
-                                    </a>
-                                </td>
+                                <tr>
+                                    <th scope="row">@i</th>
+                                    <td><span>@taskBoard.Name</span></td>
+                                    <td>
+                                        <span>@taskBoard.Type</span>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <a asp-controller="TaskBoards" asp-action="TaskBoard" asp-route-taskBoardId="@taskBoard.Id" class="btn btn-info btn-sm">
+                                                <span class="glyphicon glyphicon-remove"></span> Info
+                                            </a>
+                                        </span>
+                                    </td>
+                                    @if (adminAreas)
+                                    {
+                                        <td>
+                                            <a asp-controller="TaskBoards" asp-action="RemoveTaskBoard" asp-route-taskBoardId="@taskBoard.Id" asp-route-page="team" class="btn btn-danger btn-sm">
+                                                <span class="glyphicon glyphicon-remove"></span> Remove
+                                            </a>
+                                        </td>
+                                    }
+                                </tr>
+                                i++;
                             }
-                        </tr>
-                        i++;
-                    }
-                </tbody>
-            </table>
+                        </tbody>
+                    </table>
+                }
+            </div>
         </div>
     </div>
 </div>
@@ -175,7 +190,7 @@
             </div>
 
             <!-- Modal Body -->
-            <form asp-controller="TaskBoards" asp-action="CreateTaskBoard" asp-route-page="team">
+            <form asp-controller="TaskBoards" asp-action="CreateTaskBoard" asp-route-page="team" asp-route-TaskBoardViewModel.ProjectId="@team.ProjectId">
                 <div class="modal-body">
                     <div class="body-message">
                         <h4>Any Heading</h4>

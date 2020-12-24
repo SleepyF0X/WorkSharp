@@ -48,6 +48,7 @@ namespace WorkSharp.Mappers
                     opt => opt.MapFrom(
                         source => source.Teams))
                 .ReverseMap();
+            CreateMap<DbSolution, SolutionViewModel>().ReverseMap();
         }
     }
 }

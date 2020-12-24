@@ -1,9 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using WorkSharp.DAL.DbModels;
 using WorkSharp.DAL.EFCoreRepository.IEntityRepositories;
@@ -18,13 +23,17 @@ namespace WorkSharp.Controllers.User
         private readonly IProjectRepository _projectRepository;
         private readonly IMapper _mapper;
         private readonly UserManager<DbUser> _userManager;
-        public TasksController(ITaskRepository repository, IMapper mapper, UserManager<DbUser> userManager, IProjectRepository projectRepository, ITaskBoardRepository taskBoardRepository)
+        private readonly IWebHostEnvironment _appEnvironment;
+        private readonly ISolutionRepository _solutionRepository;
+        public TasksController(ISolutionRepository solutionRepository, ITaskRepository repository, IMapper mapper, UserManager<DbUser> userManager, IProjectRepository projectRepository, ITaskBoardRepository taskBoardRepository, IWebHostEnvironment appEnvironment)
         {
             _taskBoardRepository = taskBoardRepository;
             _repository = repository;
             _mapper = mapper;
             _userManager = userManager;
             _projectRepository = projectRepository;
+            _appEnvironment = appEnvironment;
+            _solutionRepository = solutionRepository;
         }
 
         public IActionResult CreateTask(TaskViewModel taskViewModel, Guid projectId)
@@ -54,7 +63,37 @@ namespace WorkSharp.Controllers.User
             {
                 _repository.AddExecutor(taskId, GetUserId());
             }
+            else
+            {
+                TempData["ErrorMessage"] = "You are not member of a team :(";
+            }
             return RedirectToAction("TaskBoard", "TaskBoards", new { taskBoardId });
+        }
+
+        public async Task<IActionResult> AddSolution(IFormFile solutionFile, Guid taskId, Guid taskBoardId)
+        {
+            var path = "/solutions/" + solutionFile.FileName;
+            await using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+            {
+                await solutionFile.CopyToAsync(fileStream);
+            }
+            var solution = new DbSolution() { Name = solutionFile.FileName, Path = path };
+            _repository.AddSolution(solution, taskId);
+            return RedirectToAction("TaskBoard", "TaskBoards", new { taskBoardId });
+        }
+
+        public HttpResponseMessage DownloadSolution(Guid solutionId)
+        {
+            var solution = _solutionRepository.GetSolution(solutionId);
+            var result = new HttpResponseMessage(HttpStatusCode.OK);
+                var filePath = _appEnvironment.WebRootPath + solution.Path;
+                var bytes = System.IO.File.ReadAllBytes(filePath);
+
+                result.Content = new ByteArrayContent(bytes);
+
+                var mediaType = "application/octet-stream";
+                result.Content.Headers.ContentType = new  System.Net.Http.Headers.MediaTypeHeaderValue(mediaType);
+                return result;
         }
         private Guid GetUserId()
         {

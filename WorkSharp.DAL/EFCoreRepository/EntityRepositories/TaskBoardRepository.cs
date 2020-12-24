@@ -36,6 +36,7 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
         {
             var dbTaskBoard = _context.TaskBoards
                 .Include(tb => tb.Tasks)
+                .ThenInclude(t=>t.Solution)
                 .Include(tb=>tb.Project)
                 .Include(tb=>tb.Team)
                 .ThenInclude(t=>t.Members)
