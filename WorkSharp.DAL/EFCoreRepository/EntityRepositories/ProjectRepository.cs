@@ -31,6 +31,8 @@ namespace WorkSharp.DAL.EFCoreRepository.EntityRepositories
                 .Include(p=>p.Creator)
                 .Include(p => p.Teams)
                 .ThenInclude(t=>t.Members)
+                .Include(p => p.Teams)
+                .ThenInclude(t=>t.TaskBoards)
                 .Where(p => p.Admins.Select(a => a.Id).Contains(userId) ||
                             p.Teams.SelectMany(t => t.Members).Any(m=>m.Id.Equals(userId))).ToList().AsReadOnly();
             return projects;

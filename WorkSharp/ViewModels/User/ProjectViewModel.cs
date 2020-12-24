@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using AutoMapper.Configuration.Annotations;
@@ -10,7 +11,9 @@ namespace WorkSharp.ViewModels.User
     public class ProjectViewModel
     {
         public Guid Id { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public string Info { get; set; }
         public UserViewModel Creator { get; set; }
         public IReadOnlyCollection<UserViewModel> Admins { get; set; }

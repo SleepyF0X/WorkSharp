@@ -83,7 +83,7 @@
                                     <td>
                                         @if (task.ExecutorId.Equals(Guid.Parse(User.Claims.SingleOrDefault(c => c.Type.Equals("Id"))?.Value)) && task.Solution == null)
                                         {
-                                            <button taskId="@task.Id" id="addSolution" taskId="@task.Id.ToString()" type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target=".bs-solution-modal-new">
+                                            <button id="addSolution" taskId="@task.Id.ToString()" type="button" class="btn btn-success btn-sm addSolution" data-toggle="modal" data-target=".bs-solution-modal-new">
                                                 Add Solution
                                             </button>
 
@@ -198,13 +198,15 @@
     </div>
 </div>
 <script>
-    $('#addSolution').click(function () {
-        let id = $('#addSolution').attr('taskId');
+    $(document).ready(function (e) { 
+    $('.addSolution').click(function (event) {
+        let id = event.target.getAttribute('taskId');
         console.log(id);
         let action = $('#solution').attr('action');
         action += "&taskId=" + id;
         $('#solution').attr('action', action);
-    });
+    })
+        });
 </script>
 @if (ViewBag.ErrorMessage != null)
 {
