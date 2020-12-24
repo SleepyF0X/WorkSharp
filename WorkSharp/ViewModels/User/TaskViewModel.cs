@@ -14,5 +14,7 @@ namespace WorkSharp.ViewModels.User
         public DateTimeOffset Deadline { get; set; }
         public Guid ExecutorId { get; set; }
         public UserViewModel Executor { get; set; }
+        public Guid SolutionId { get; set; }
+        public SolutionViewModel Solution { get; set; }
     }
 }

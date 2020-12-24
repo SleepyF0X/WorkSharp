@@ -15,19 +15,26 @@ namespace WorkSharp.Controllers.User
     public class TaskBoardsController : Controller
     {
         private readonly ITaskBoardRepository _repository;
+        private readonly IProjectRepository _projectRepository;
         private readonly IMapper _mapper;
         private readonly UserManager<DbUser> _userManager;
-        public TaskBoardsController(ITaskBoardRepository repository, IMapper mapper, UserManager<DbUser> userManager)
+        public TaskBoardsController(ITaskBoardRepository repository, IMapper mapper, UserManager<DbUser> userManager, IProjectRepository projectRepository)
         {
             _repository = repository;
             _mapper = mapper;
             _userManager = userManager;
+            _projectRepository = projectRepository;
         }
         public IActionResult TaskBoard(Guid taskBoardId)
         {
+            if (TempData["ErrorMessage"] != null)
+            {
+                ViewBag.ErrorMessage = TempData["ErrorMessage"].ToString();
+            }
             var userId = GetUserId();
             var dbTaskBoard = _repository.GetByIdSecure(taskBoardId, userId);
             var taskBoardViewModel = _mapper.Map<TaskBoardViewModel>(dbTaskBoard);
+            ViewBag.AdminAreas = _projectRepository.IsAdmin(taskBoardViewModel.ProjectId, GetUserId());
             ViewData["TaskBoard"] = taskBoardViewModel;
             return View("~/Views/User/TaskBoards/TaskBoard.cshtml");
         }
@@ -48,7 +55,7 @@ namespace WorkSharp.Controllers.User
                 var taskBoard = _repository.GetByIdSecure(taskBoardId, userId);
                 _repository.DeleteSecure(taskBoardId, userId);
                 _repository.Save();
-                return RedirectToAction("Team", "Teams", new {taskBoard.TeamId, taskBoard.ProjectId});
+                return RedirectToAction("Team", "Teams", new {taskBoard.TeamId, projId = taskBoard.ProjectId});
             }
         }
 
@@ -69,7 +76,7 @@ namespace WorkSharp.Controllers.User
                 var dbTaskBoard = _mapper.Map<DbTaskBoard>(taskBoardViewModel);
                 _repository.Create(dbTaskBoard);
                 _repository.Save();
-                return RedirectToAction("Team", "Teams", new{taskBoardViewModel.TeamId, taskBoardViewModel.ProjectId});
+                return RedirectToAction("Team", "Teams", new{taskBoardViewModel.TeamId, projId = taskBoardViewModel.ProjectId});
             }
             
         }

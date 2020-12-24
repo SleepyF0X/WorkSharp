@@ -13,5 +13,6 @@ namespace WorkSharp.DAL.EFCoreRepository.IEntityRepositories
         public void CreateTask(DbTask task);
         public void DeleteTask(Guid taskId);
         public void AddExecutor(Guid taskId, Guid userId);
+        public void AddSolution(DbSolution solution, Guid taskId);
     }
 }

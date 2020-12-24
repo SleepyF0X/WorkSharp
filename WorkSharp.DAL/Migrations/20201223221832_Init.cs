@@ -51,6 +51,19 @@ namespace WorkSharp.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Solutions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Path = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Solutions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -282,7 +295,8 @@ namespace WorkSharp.DAL.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Info = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Deadline = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    ExecutorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ExecutorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    SolutionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -291,6 +305,12 @@ namespace WorkSharp.DAL.Migrations
                         name: "FK_Tasks_AspNetUsers_ExecutorId",
                         column: x => x.ExecutorId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Tasks_Solutions_SolutionId",
+                        column: x => x.SolutionId,
+                        principalTable: "Solutions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -366,6 +386,11 @@ namespace WorkSharp.DAL.Migrations
                 column: "ExecutorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Tasks_SolutionId",
+                table: "Tasks",
+                column: "SolutionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tasks_TaskBoardId",
                 table: "Tasks",
                 column: "TaskBoardId");
@@ -409,6 +434,9 @@ namespace WorkSharp.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Solutions");
 
             migrationBuilder.DropTable(
                 name: "TaskBoards");

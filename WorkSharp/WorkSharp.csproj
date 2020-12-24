@@ -11,6 +11,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="morelinq" Version="3.3.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +20,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\css\teams\" />
+    <Folder Include="wwwroot\solutions\" />
   </ItemGroup>
 
 </Project>

@@ -70,7 +70,7 @@ namespace WorkSharp.Controllers.User
                 _repository.Save();
                 return RedirectToAction("Project", "Projects", new{projectId = teamViewModel.ProjectId});
             }
-            TempData["ErrorMessage"] = "Not Access!";
+            TempData["ErrorMessage"] = "Team Exist";
             return RedirectToAction("Project", "Projects", new { projectId = teamTaskBoardViewModel.TeamViewModel.ProjectId });
         }
         public IActionResult AddMember(Guid teamId, TeamViewModel teamViewModel, Guid projId)

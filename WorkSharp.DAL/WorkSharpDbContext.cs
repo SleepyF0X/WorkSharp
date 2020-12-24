@@ -14,6 +14,7 @@ namespace WorkSharp.DAL
         public DbSet<DbTask> Tasks { get; set; }
         public DbSet<DbTaskBoard> TaskBoards { get; set; }
         public DbSet<DbTeam> Teams { get; set; }
+        public DbSet<DbSolution> Solutions { get; set; }
         public WorkSharpDbContext(DbContextOptions<WorkSharpDbContext> options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
